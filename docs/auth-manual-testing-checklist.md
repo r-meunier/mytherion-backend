@@ -52,9 +52,9 @@ This checklist guides you through manually testing all authentication features. 
 **Notes:**
 
 ```
-Date/Time: _______________
-Result: PASS / FAIL
-Issues: _______________________________________________
+Date/Time: 17/01/2026 21:31
+Result: PASS
+Issues: None
 ```
 
 ---
@@ -70,14 +70,16 @@ Issues: _______________________________________________
 
 **Expected Results:**
 
-- [ ] Form does NOT submit
-- [ ] Error message displayed: "Invalid email format"
+- [x] Form does NOT submit
+- [x] Error message displayed: "Invalid email format"
 - [ ] No API request made (check Network tab)
 
 **Notes:**
 
 ```
-Result: PASS / FAIL
+Date/Time: 17/01/2026 21:31
+Result: PASS
+Issues: None
 ```
 
 ---
@@ -86,20 +88,20 @@ Result: PASS / FAIL
 
 **Steps:**
 
-1. [ ] Navigate to `/register`
-2. [ ] Enter username: `ab` (2 characters)
-3. [ ] Fill other fields correctly
-4. [ ] Click "Register"
+1. [x] Navigate to `/register`
+2. [x] Enter username: `ab` (2 characters)
+3. [x] Fill other fields correctly
+4. [x] Click "Register"
 
 **Expected Results:**
 
-- [ ] Form does NOT submit
-- [ ] Error message: "Username must be at least 3 characters"
+- [x] Form does NOT submit
+- [x] Error message: "Username must be at least 3 characters"
 
 **Notes:**
 
 ```
-Result: PASS / FAIL
+Result: PASS
 ```
 
 ---
@@ -108,20 +110,20 @@ Result: PASS / FAIL
 
 **Steps:**
 
-1. [ ] Navigate to `/register`
-2. [ ] Enter password: `pass123` (7 characters)
-3. [ ] Fill other fields correctly
-4. [ ] Click "Register"
+1. [x] Navigate to `/register`
+2. [x] Enter password: `pass123` (7 characters)
+3. [x] Fill other fields correctly
+4. [x] Click "Register"
 
 **Expected Results:**
 
-- [ ] Form does NOT submit
-- [ ] Error message: "Password must be at least 8 characters"
+- [x] Form does NOT submit
+- [x] Error message: "Password must be at least 8 characters"
 
 **Notes:**
 
 ```
-Result: PASS / FAIL
+Result: PASS
 ```
 
 ---
@@ -130,21 +132,21 @@ Result: PASS / FAIL
 
 **Steps:**
 
-1. [ ] Navigate to `/register`
-2. [ ] Enter password: `password123`
-3. [ ] Enter confirm password: `password456`
-4. [ ] Fill other fields correctly
-5. [ ] Click "Register"
+1. [x] Navigate to `/register`
+2. [x] Enter password: `password123`
+3. [x] Enter confirm password: `password456`
+4. [x] Fill other fields correctly
+5. [x] Click "Register"
 
 **Expected Results:**
 
-- [ ] Form does NOT submit
-- [ ] Error message: "Passwords do not match"
+- [x] Form does NOT submit
+- [x] Error message: "Passwords do not match"
 
 **Notes:**
 
 ```
-Result: PASS / FAIL
+Result: PASS
 ```
 
 ---
@@ -153,22 +155,24 @@ Result: PASS / FAIL
 
 **Steps:**
 
-1. [ ] Register a user with email `test@example.com` (if not already done)
-2. [ ] Logout
-3. [ ] Try to register again with same email `test@example.com`
+1. [x] Register a user with email `test@example.com` (if not already done)
+2. [x] Logout
+3. [x] Try to register again with same email `test@example.com`
 
 **Expected Results:**
 
-- [ ] API returns error
-- [ ] Error message displayed in form
-- [ ] User remains on registration page
-- [ ] No redirect occurs
+- [x] API returns error
+- [x] Error message displayed in form
+- [x] User remains on registration page
+- [x] No redirect occurs
 
 **Notes:**
 
 ```
-Result: PASS / FAIL
-Error Message: _______________________________________________
+Result: PASS
+Error Message:
+ - On PC web browser (Vivaldi): {"status":400,"error":"Bad Request","message":"Email already in use","timestamp":"2026-01-17T20:37:12.288033500Z"}
+ - On Android web browser (Vivaldi): "Failed to fetch"
 ```
 
 ---
@@ -181,24 +185,24 @@ Error Message: _______________________________________________
 
 **Steps:**
 
-1. [ ] Navigate to `http://localhost:3001/login`
-2. [ ] Enter email: `test@example.com`
-3. [ ] Enter password: `password123`
-4. [ ] Click "Login"
+1. [x] Navigate to `http://localhost:3001/login`
+2. [x] Enter email: `test@example.com`
+3. [x] Enter password: `test12345`
+4. [x] Click "Login"
 
 **Expected Results:**
 
-- [ ] Form submits successfully
-- [ ] Redirected to home page (`/`)
-- [ ] Navbar shows authenticated state with username
-- [ ] Cookie `mytherion_token` is set
-- [ ] Cookie has security flags (HttpOnly, SameSite=Strict)
+- [x] Form submits successfully
+- [x] Redirected to home page (`/`)
+- [x] Navbar shows authenticated state with username
+- [x] Cookie `mytherion_token` is set
+- [x] Cookie has security flags (HttpOnly, SameSite=Strict)
 
 **Notes:**
 
 ```
-Date/Time: _______________
-Result: PASS / FAIL
+Date/Time: 17/01/2026 21:41
+Result: PASS
 ```
 
 ---
@@ -207,22 +211,26 @@ Result: PASS / FAIL
 
 **Steps:**
 
-1. [ ] Navigate to `/login`
+1. [x] Navigate to `/login`
 2. [ ] Enter email: `test@example.com`
 3. [ ] Enter password: `wrongpassword`
 4. [ ] Click "Login"
 
 **Expected Results:**
 
-- [ ] API returns error
-- [ ] Error message displayed: "Invalid credentials"
-- [ ] User remains on login page
-- [ ] No cookie is set
+- [x] API returns error
+- [-] Error message displayed: "Invalid credentials"
+- [x] User remains on login page
+- [x] No cookie is set
 
 **Notes:**
 
 ```
-Result: PASS / FAIL
+Date/Time: 17/01/2026 21:42
+Result: PASS
+Error Message:
+ - On PC web browser (Vivaldi): {"status":400,"error":"Bad Request","message":"Invalid credentials","timestamp":"2026-01-17T20:42:41.960325200Z"}
+ - On Android web browser (Vivaldi): "Failed to fetch"
 ```
 
 ---
@@ -231,21 +239,25 @@ Result: PASS / FAIL
 
 **Steps:**
 
-1. [ ] Navigate to `/login`
-2. [ ] Enter email: `nonexistent@example.com`
-3. [ ] Enter password: `password123`
-4. [ ] Click "Login"
+1. [x] Navigate to `/login`
+2. [x] Enter email: `nonexistent@example.com`
+3. [x] Enter password: `password123`
+4. [x] Click "Login"
 
 **Expected Results:**
 
-- [ ] API returns error
-- [ ] Error message: "Invalid credentials" (generic for security)
-- [ ] No cookie is set
+- [x] API returns error
+- [-] Error message: "Invalid credentials" (generic for security)
+- [x] No cookie is set
 
 **Notes:**
 
 ```
-Result: PASS / FAIL
+Date/Time: 17/01/2026 21:42
+Result: PASS
+Error Message:
+ - On PC web browser (Vivaldi): {"status":400,"error":"Bad Request","message":"Invalid credentials","timestamp":"2026-01-17T20:43:56.211848800Z"}
+ - On Android web browser (Vivaldi): "Failed to fetch"
 ```
 
 ---
@@ -254,20 +266,20 @@ Result: PASS / FAIL
 
 **Steps:**
 
-1. [ ] Navigate to `/login`
-2. [ ] Leave email and password empty
-3. [ ] Click "Login"
+1. [x] Navigate to `/login`
+2. [x] Leave email and password empty
+3. [x] Click "Login"
 
 **Expected Results:**
 
-- [ ] Form does NOT submit
-- [ ] Validation errors shown for both fields
-- [ ] No API request made
+- [x] Form does NOT submit
+- [x] Validation errors shown for both fields
+- [x] No API request made
 
 **Notes:**
 
 ```
-Result: PASS / FAIL
+Result: PASS
 ```
 
 ---
@@ -280,27 +292,27 @@ Result: PASS / FAIL
 
 **Steps:**
 
-1. [ ] Login successfully
-2. [ ] Verify navbar shows authenticated state
-3. [ ] Refresh the page (F5 or Ctrl+R)
+1. [x] Login successfully
+2. [x] Verify navbar shows authenticated state
+3. [x] Refresh the page (F5 or Ctrl+R)
 
 **Expected Results:**
 
-- [ ] User remains authenticated after refresh
-- [ ] Navbar still shows username and authenticated buttons
-- [ ] Redux state is rehydrated via `/api/auth/me` call
-- [ ] Cookie persists across refresh
+- [x] User remains authenticated after refresh
+- [x] Navbar still shows username and authenticated buttons
+- [x] Redux state is rehydrated via `/api/auth/me` call
+- [x] Cookie persists across refresh
 
 **Technical Verification:**
 
-- [ ] Check Network tab: `/api/auth/me` request is made on page load
-- [ ] Request includes cookie automatically
-- [ ] Response returns user info
+- [x] Check Network tab: `/api/auth/me` request is made on page load
+- [x] Request includes cookie automatically
+- [x] Response returns user info
 
 **Notes:**
 
 ```
-Result: PASS / FAIL
+Result: PASS
 ```
 
 ---
@@ -311,20 +323,20 @@ Result: PASS / FAIL
 
 **Steps:**
 
-1. [ ] Login in Tab 1
-2. [ ] Open new tab (Tab 2)
-3. [ ] Navigate to `http://localhost:3001` in Tab 2
+1. [x] Login in Tab 1
+2. [x] Open new tab (Tab 2)
+3. [x] Navigate to `http://localhost:3001` in Tab 2
 
 **Expected Results:**
 
-- [ ] User is authenticated in Tab 2
-- [ ] Navbar shows authenticated state
-- [ ] Cookie is shared across tabs
+- [x] User is authenticated in Tab 2
+- [x] Navbar shows authenticated state
+- [x] Cookie is shared across tabs
 
 **Notes:**
 
 ```
-Result: PASS / FAIL
+Result: PASS
 ```
 
 ---
@@ -335,20 +347,20 @@ Result: PASS / FAIL
 
 **Steps:**
 
-1. [ ] Clear all cookies for localhost
-2. [ ] Navigate to `http://localhost:3001`
+1. [x] Clear all cookies for localhost
+2. [x] Navigate to `http://localhost:3001`
 
 **Expected Results:**
 
-- [ ] Navbar shows "Login" button
-- [ ] No username displayed
-- [ ] "Profile", "Settings", "Logout" buttons NOT visible
-- [ ] Redux state: `isAuthenticated = false`, `user = null`
+- [x] Navbar shows "Login" button
+- [x] No username displayed
+- [x] "Profile", "Settings", "Logout" buttons NOT visible
+- [x] Redux state: `isAuthenticated = false`, `user = null`
 
 **Notes:**
 
 ```
-Result: PASS / FAIL
+Result: PASS
 ```
 
 ---
@@ -365,15 +377,15 @@ Result: PASS / FAIL
 
 **Expected Results:**
 
-- [ ] User is redirected to `/login` page
-- [ ] Cookie `mytherion_token` is cleared
-  - [ ] Check DevTools: Cookie should be deleted or have Max-Age=0
-- [ ] Redux state updated: `isAuthenticated = false`, `user = null`
+- [x] User is redirected to `/login` page
+- [x] Cookie `mytherion_token` is cleared
+  - [x] Check DevTools: Cookie should be deleted or have Max-Age=0
+- [x] Redux state updated: `isAuthenticated = false`, `user = null`
 
 **Notes:**
 
 ```
-Result: PASS / FAIL
+Result: PASS
 ```
 
 ---
@@ -384,19 +396,19 @@ Result: PASS / FAIL
 
 **Steps:**
 
-1. [ ] Logout
-2. [ ] Navigate to home page (`/`)
+1. [x] Logout
+2. [x] Navigate to home page (`/`)
 
 **Expected Results:**
 
-- [ ] User is NOT authenticated
-- [ ] Navbar shows unauthenticated state
-- [ ] No cookie present
+- [x] User is NOT authenticated
+- [x] Navbar shows unauthenticated state
+- [x] No cookie present
 
 **Notes:**
 
 ```
-Result: PASS / FAIL
+Result: PASS
 ```
 
 ---
@@ -407,18 +419,18 @@ Result: PASS / FAIL
 
 **Steps:**
 
-1. [ ] Navigate to `/login`
-2. [ ] Click "Register here" link
+1. [x] Navigate to `/login`
+2. [x] Click "Register here" link
 
 **Expected Results:**
 
-- [ ] Redirected to `/register` page
-- [ ] Registration form is displayed
+- [x] Redirected to `/register` page
+- [x] Registration form is displayed
 
 **Notes:**
 
 ```
-Result: PASS / FAIL
+Result: PASS
 ```
 
 ---
@@ -427,18 +439,18 @@ Result: PASS / FAIL
 
 **Steps:**
 
-1. [ ] Navigate to `/register`
-2. [ ] Click "Login here" link
+1. [x] Navigate to `/register`
+2. [x] Click "Login here" link
 
 **Expected Results:**
 
-- [ ] Redirected to `/login` page
-- [ ] Login form is displayed
+- [x] Redirected to `/login` page
+- [x] Login form is displayed
 
 **Notes:**
 
 ```
-Result: PASS / FAIL
+Result: PASS
 ```
 
 ---
@@ -447,18 +459,18 @@ Result: PASS / FAIL
 
 **Steps:**
 
-1. [ ] Ensure logged out
-2. [ ] Navigate to home page
-3. [ ] Click "Login" button in navbar
+1. [x] Ensure logged out
+2. [x] Navigate to home page
+3. [x] Click "Login" button in navbar
 
 **Expected Results:**
 
-- [ ] Redirected to `/login` page
+- [x] Redirected to `/login` page
 
 **Notes:**
 
 ```
-Result: PASS / FAIL
+Result: PASS
 ```
 
 ---
@@ -476,17 +488,17 @@ Result: PASS / FAIL
 
 **Expected Results:**
 
-- [ ] `HttpOnly` flag is set (prevents JavaScript access)
-- [ ] `SameSite` is set to `Strict` (CSRF protection)
-- [ ] `Secure` flag is `false` (development) - should be `true` in production
-- [ ] `Path` is `/`
-- [ ] `Max-Age` matches JWT expiration
+- [x] `HttpOnly` flag is set (prevents JavaScript access)
+- [x] `SameSite` is set to `Strict` (CSRF protection)
+- [-] `Secure` flag is `false` (development) - should be `true` in production
+- [x] `Path` is `/`
+- [?] `Max-Age` matches JWT expiration --> maxAge = 2026-01-17T21:53:46.870Z
 
 **Notes:**
 
 ```
-Result: PASS / FAIL
-Cookie Details: _______________________________________________
+Result: PASS
+Cookie Details: mytherion_token=eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiI1MyIsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzY4NjgzMjI2LCJleHAiOjE3Njg2ODY4MjZ9.JLuB1Mbn0RQv7SBzaPbmlVduTlzpPxh2YqPX_F96kyJCq1iEzF9ceD8mgqPdsbAy
 ```
 
 ---
@@ -497,19 +509,19 @@ Cookie Details: _______________________________________________
 
 **Steps:**
 
-1. [ ] Open browser console
-2. [ ] Try to access cookie: `document.cookie`
+1. [x] Open browser console
+2. [x] Try to access cookie: `document.cookie`
 
 **Expected Results:**
 
-- [ ] `mytherion_token` is NOT visible in `document.cookie` output
-- [ ] HttpOnly flag prevents JavaScript access
+- [x] `mytherion_token` is NOT visible in `document.cookie` output
+- [x] HttpOnly flag prevents JavaScript access
 
 **Notes:**
 
 ```
-Result: PASS / FAIL
-Console Output: _______________________________________________
+Result: PASS
+Console Output: ''
 ```
 
 ---
@@ -518,19 +530,19 @@ Console Output: _______________________________________________
 
 **Steps:**
 
-1. [ ] Register or login
-2. [ ] Check Network tab → Response body
+1. [x] Register or login
+2. [x] Check Network tab → Response body
 
 **Expected Results:**
 
-- [ ] Response contains: `id`, `email`, `username`, `role`
-- [ ] Response does NOT contain: `password`, `passwordHash`, or JWT token
-- [ ] JWT is only in `Set-Cookie` header
+- [x] Response contains: `id`, `email`, `username`, `role`
+- [x] Response does NOT contain: `password`, `passwordHash`, or JWT token
+- [x] JWT is only in `Set-Cookie` header
 
 **Notes:**
 
 ```
-Result: PASS / FAIL
+Result: PASS
 ```
 
 ---
@@ -541,20 +553,20 @@ Result: PASS / FAIL
 
 **Steps:**
 
-1. [ ] Submit login or register form
-2. [ ] Observe button during API request
+1. [x] Submit login or register form
+2. [x] Observe button during API request
 
 **Expected Results:**
 
-- [ ] Button text changes to "Logging in..." or "Creating account..."
-- [ ] Button is disabled during request
-- [ ] Form fields are disabled during request
-- [ ] Loading state ends after response
+- [x] Button text changes to "Logging in..." or "Creating account..."
+- [-] Button is disabled during request
+- [-] Form fields are disabled during request
+- [x] Loading state ends after response
 
 **Notes:**
 
 ```
-Result: PASS / FAIL
+Result: FAIL
 ```
 
 ---
@@ -563,20 +575,20 @@ Result: PASS / FAIL
 
 **Steps:**
 
-1. [ ] Enter invalid credentials
-2. [ ] Submit form
-3. [ ] Correct the error
-4. [ ] Type in the field
+1. [x] Enter invalid credentials
+2. [x] Submit form
+3. [x] Correct the error
+4. [x] Type in the field
 
 **Expected Results:**
 
-- [ ] Validation error clears when user starts typing
-- [ ] API error remains until form is resubmitted
+- [x] Validation error clears when user starts typing
+- [x] API error remains until form is resubmitted
 
 **Notes:**
 
 ```
-Result: PASS / FAIL
+Result: PASS
 ```
 
 ---
@@ -585,21 +597,21 @@ Result: PASS / FAIL
 
 **Steps:**
 
-1. [ ] Test on different screen sizes (mobile, tablet, desktop)
-2. [ ] Use DevTools responsive mode
+1. [x] Test on different screen sizes (mobile, tablet, desktop)
+2. [x] Use DevTools responsive mode
 
 **Expected Results:**
 
-- [ ] Forms are centered and readable on all sizes
-- [ ] Navbar adapts to screen size
-- [ ] No horizontal scrolling
-- [ ] Touch-friendly on mobile
+- [x] Forms are centered and readable on all sizes
+- [?] Navbar adapts to screen size --> RESULT: no navbar visible on login/register pages
+- [x] No horizontal scrolling
+- [x] Touch-friendly on mobile
 
 **Notes:**
 
 ```
-Result: PASS / FAIL
-Screen Sizes Tested: _______________________________________________
+Result: PASS (?)
+Screen Sizes Tested: iPad Pro, iPhone SE, iPhone 14 Pro
 ```
 
 ---
@@ -642,11 +654,11 @@ Screen Sizes Tested: _______________________________________________
 - [ ] Ready for production (with noted limitations)
 - [ ] Requires fixes before deployment
 
-**Tester:** ******\_\_\_******  
-**Date:** ******\_\_\_******  
+**Tester:** **\*\***\_\_\_**\*\***  
+**Date:** **\*\***\_\_\_**\*\***  
 **Environment:** Development / Staging / Production  
-**Browser:** ******\_\_\_******  
-**OS:** ******\_\_\_******
+**Browser:** **\*\***\_\_\_**\*\***  
+**OS:** **\*\***\_\_\_**\*\***
 
 ---
 
