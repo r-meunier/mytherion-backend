@@ -4,6 +4,44 @@ This directory contains project documentation for the Mytherion application.
 
 ---
 
+## Performance & Monitoring
+
+### [Performance Monitoring Strategy](./PERFORMANCE_MONITORING.md)
+
+Comprehensive guide to measuring and monitoring API performance:
+
+- Three-tier implementation approach (Logging → Actuator → Full Observability)
+- Spring Boot Actuator + Micrometer setup
+- Prometheus + Grafana integration
+- Custom metrics and alerting
+- Production-ready monitoring stack
+
+**Complete strategy for performance visibility from development to production.**
+
+### [Performance Monitoring Quick Start](./PERFORMANCE_MONITORING_QUICKSTART.md)
+
+Get started with API performance monitoring in 30 minutes:
+
+- Step-by-step setup guide
+- Immediate metrics visibility
+- Common performance queries
+- Before/after comparison tools
+
+**Perfect for getting started quickly with minimal setup.**
+
+### [Logging Guide](./LOGGING.md)
+
+Structured logging system documentation:
+
+- Kotlin logging extensions
+- Request correlation with MDC
+- Execution timing with `measureTime()`
+- Best practices and examples
+
+**Foundation for performance measurement through logs.**
+
+---
+
 ## Authentication Documentation
 
 ### [Future Features](./auth-future-features.md)
@@ -54,6 +92,9 @@ Step-by-step manual testing guide for authentication features:
 ```
 docs/
 ├── README.md (this file)
+├── PERFORMANCE_MONITORING.md
+├── PERFORMANCE_MONITORING_QUICKSTART.md
+├── LOGGING.md
 ├── auth-future-features.md
 └── auth-manual-testing-checklist.md
 ```
@@ -74,6 +115,9 @@ When adding new documentation:
 
 ## Version History
 
+- **2026-01-20**: Added performance monitoring documentation
+  - Performance monitoring strategy
+  - Quick start guide
 - **2026-01-17**: Initial documentation created
   - Authentication future features
   - Manual testing checklist
