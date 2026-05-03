@@ -104,8 +104,6 @@ describe('ProjectForm', () => {
   });
 
   it('should show error when name exceeds 255 characters', async () => {
-    jest.setTimeout(10000);
-    const user = userEvent.setup();
     render(
       <ProjectForm
         onSubmit={mockOnSubmit}
@@ -116,7 +114,7 @@ describe('ProjectForm', () => {
     const nameInput = screen.getByLabelText(/Project Name/i);
     const longName = 'a'.repeat(256);
     
-    await user.type(nameInput, longName);
+    fireEvent.change(nameInput, { target: { value: longName } });
     
     const submitButton = screen.getByText('Create Project');
     fireEvent.click(submitButton);
@@ -159,8 +157,8 @@ describe('ProjectForm', () => {
     const nameInput = screen.getByLabelText(/Project Name/i);
     const descInput = screen.getByLabelText(/Description/i);
 
-    await user.type(nameInput, 'New Project');
-    await user.type(descInput, 'New Description');
+    fireEvent.change(nameInput, { target: { value: 'New Project' } });
+    fireEvent.change(descInput, { target: { value: 'New Description' } });
 
     const submitButton = screen.getByText('Create Project');
     fireEvent.click(submitButton);
@@ -185,8 +183,8 @@ describe('ProjectForm', () => {
     const nameInput = screen.getByLabelText(/Project Name/i);
     const descInput = screen.getByLabelText(/Description/i);
 
-    await user.type(nameInput, '  Trimmed Name  ');
-    await user.type(descInput, '  Trimmed Desc  ');
+    fireEvent.change(nameInput, { target: { value: '  Trimmed Name  ' } });
+    fireEvent.change(descInput, { target: { value: '  Trimmed Desc  ' } });
 
     const submitButton = screen.getByText('Create Project');
     fireEvent.click(submitButton);
@@ -209,7 +207,7 @@ describe('ProjectForm', () => {
     );
 
     const nameInput = screen.getByLabelText(/Project Name/i);
-    await user.type(nameInput, 'Project Without Description');
+    fireEvent.change(nameInput, { target: { value: 'Project Without Description' } });
 
     const submitButton = screen.getByText('Create Project');
     fireEvent.click(submitButton);

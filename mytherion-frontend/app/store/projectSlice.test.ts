@@ -237,6 +237,7 @@ describe('projectSlice', () => {
     it('should remove project from list on fulfilled', () => {
       const action = {
         type: deleteProject.fulfilled.type,
+        payload: 1,
         meta: { arg: 1 },
       };
       const state = projectReducer(stateWithProject, action);

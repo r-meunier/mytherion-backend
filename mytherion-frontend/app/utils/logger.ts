@@ -15,12 +15,15 @@ interface LogContext {
 }
 
 class Logger {
-  private isDevelopment: boolean;
-  private minLevel: LogLevel;
+  public isDevelopmentOverride: boolean | null = null;
 
-  constructor() {
-    this.isDevelopment = process.env.NODE_ENV === 'development';
-    this.minLevel = this.isDevelopment ? LogLevel.DEBUG : LogLevel.INFO;
+  private get isDevelopment(): boolean {
+    if (this.isDevelopmentOverride !== null) return this.isDevelopmentOverride;
+    return process.env.NODE_ENV === 'development';
+  }
+
+  private get minLevel(): LogLevel {
+    return this.isDevelopment ? LogLevel.DEBUG : LogLevel.INFO;
   }
 
   private shouldLog(level: LogLevel): boolean {
@@ -37,7 +40,7 @@ class Logger {
   private getConsoleMethod(level: LogLevel): 'log' | 'info' | 'warn' | 'error' {
     switch (level) {
       case LogLevel.DEBUG:
-        return 'log';
+        return 'debug';
       case LogLevel.INFO:
         return 'info';
       case LogLevel.WARN:
@@ -162,6 +165,13 @@ class ChildLogger {
 
   error(message: string, error?: Error | unknown, context?: LogContext): void {
     this.parent.error(message, error, { ...this.defaultContext, ...context });
+  }
+
+  /**
+   * Create a nested child logger
+   */
+  child(context: LogContext): ChildLogger {
+    return new ChildLogger(this.parent, { ...this.defaultContext, ...context });
   }
 }
 

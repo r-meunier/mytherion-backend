@@ -12,9 +12,17 @@ jest.mock('../store/hooks', () => ({
   useAppDispatch: jest.fn(),
 }));
 
+const mockPush = jest.fn();
+const mockPathname = jest.fn(() => '/');
+const mockUseRouter = jest.fn(() => ({
+  push: mockPush,
+  prefetch: jest.fn(),
+  replace: jest.fn(),
+}));
+
 jest.mock('next/navigation', () => ({
-  useRouter: jest.fn(),
-  usePathname: jest.fn(),
+  useRouter: () => mockUseRouter(),
+  usePathname: () => mockPathname(),
 }));
 
 jest.mock('../store/authSlice', () => ({
@@ -41,7 +49,8 @@ describe('DashboardHeader', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     (useAppDispatch as jest.Mock).mockReturnValue(mockDispatch);
-    (useRouter as jest.Mock).mockReturnValue({ push: mockPush });
+    mockUseRouter.mockReturnValue({ push: mockPush });
+    mockPathname.mockReturnValue('/');
   });
 
   it('renders loading skeleton when not initialized', () => {

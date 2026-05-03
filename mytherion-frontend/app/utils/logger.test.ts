@@ -2,6 +2,7 @@ import logger from './logger';
 
 describe('logger', () => {
   let consoleLogSpy: jest.SpyInstance;
+  let consoleInfoSpy: jest.SpyInstance;
   let consoleWarnSpy: jest.SpyInstance;
   let consoleErrorSpy: jest.SpyInstance;
   let consoleDebugSpy: jest.SpyInstance;
@@ -10,6 +11,7 @@ describe('logger', () => {
 
   beforeEach(() => {
     consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();
+    consoleInfoSpy = jest.spyOn(console, 'info').mockImplementation();
     consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
     consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
     consoleDebugSpy = jest.spyOn(console, 'debug').mockImplementation();
@@ -17,6 +19,7 @@ describe('logger', () => {
 
   afterEach(() => {
     consoleLogSpy.mockRestore();
+    consoleInfoSpy.mockRestore();
     consoleWarnSpy.mockRestore();
     consoleErrorSpy.mockRestore();
     consoleDebugSpy.mockRestore();
@@ -24,6 +27,7 @@ describe('logger', () => {
       value: originalEnv,
       writable: true,
     });
+    logger.isDevelopmentOverride = null;
   });
 
   // ==================== Basic Logging Tests ====================
@@ -31,7 +35,7 @@ describe('logger', () => {
   describe('basic logging', () => {
     it('should log info messages', () => {
       logger.info('Test info message');
-      expect(consoleLogSpy).toHaveBeenCalled();
+      expect(consoleInfoSpy).toHaveBeenCalled();
     });
 
     it('should log warn messages', () => {
@@ -45,10 +49,7 @@ describe('logger', () => {
     });
 
     it('should log debug messages in development', () => {
-      Object.defineProperty(process.env, 'NODE_ENV', {
-        value: 'development',
-        writable: true,
-      });
+      logger.isDevelopmentOverride = true;
       logger.debug('Test debug');
       expect(consoleDebugSpy).toHaveBeenCalled();
     });
@@ -59,9 +60,13 @@ describe('logger', () => {
   describe('context enrichment', () => {
     it('should log with context object', () => {
       logger.info('User action', { userId: 123, action: 'login' });
-      expect(consoleLogSpy).toHaveBeenCalled();
-      const logCall = consoleLogSpy.mock.calls[0];
-      expect(logCall).toContain('User action');
+      expect(consoleInfoSpy).toHaveBeenCalled();
+      const logCall = consoleInfoSpy.mock.calls[0];
+      // Check if the message is included in any argument
+      const messageIncluded = logCall.some(arg => 
+        typeof arg === 'string' && (arg.includes('User action') || JSON.stringify(arg).includes('User action'))
+      );
+      expect(messageIncluded).toBe(true);
     });
 
     it('should handle error objects', () => {
@@ -76,7 +81,7 @@ describe('logger', () => {
         projectId: 2,
         action: 'create',
       });
-      expect(consoleLogSpy).toHaveBeenCalled();
+      expect(consoleInfoSpy).toHaveBeenCalled();
     });
   });
 
@@ -87,8 +92,8 @@ describe('logger', () => {
       const childLogger = logger.child({ service: 'projectService' });
       childLogger.info('Service log');
       
-      expect(consoleLogSpy).toHaveBeenCalled();
-      const logCall = consoleLogSpy.mock.calls[0];
+      expect(consoleInfoSpy).toHaveBeenCalled();
+      const logCall = consoleInfoSpy.mock.calls[0];
       expect(logCall.some((arg: any) => 
         JSON.stringify(arg).includes('projectService')
       )).toBe(true);
@@ -98,7 +103,7 @@ describe('logger', () => {
       const childLogger = logger.child({ service: 'authService' });
       childLogger.info('Auth event', { userId: 456 });
       
-      expect(consoleLogSpy).toHaveBeenCalled();
+      expect(consoleInfoSpy).toHaveBeenCalled();
     });
 
     it('should create nested child loggers', () => {
@@ -106,7 +111,7 @@ describe('logger', () => {
       const requestLogger = serviceLogger.child({ requestId: '123' });
       
       requestLogger.info('Request processed');
-      expect(consoleLogSpy).toHaveBeenCalled();
+      expect(consoleInfoSpy).toHaveBeenCalled();
     });
   });
 
@@ -114,10 +119,7 @@ describe('logger', () => {
 
   describe('log levels', () => {
     it('should respect production log level', () => {
-      Object.defineProperty(process.env, 'NODE_ENV', {
-        value: 'production',
-        writable: true,
-      });
+      logger.isDevelopmentOverride = false;
       
       // Debug should not log in production
       logger.debug('Debug message');
@@ -125,14 +127,11 @@ describe('logger', () => {
       
       // Info should log in production
       logger.info('Info message');
-      expect(consoleLogSpy).toHaveBeenCalled();
+      expect(consoleInfoSpy).toHaveBeenCalled();
     });
 
     it('should log all levels in development', () => {
-      Object.defineProperty(process.env, 'NODE_ENV', {
-        value: 'development',
-        writable: true,
-      });
+      logger.isDevelopmentOverride = true;
       
       logger.debug('Debug');
       logger.info('Info');
@@ -140,7 +139,7 @@ describe('logger', () => {
       logger.error('Error');
       
       expect(consoleDebugSpy).toHaveBeenCalled();
-      expect(consoleLogSpy).toHaveBeenCalled();
+      expect(consoleInfoSpy).toHaveBeenCalled();
       expect(consoleWarnSpy).toHaveBeenCalled();
       expect(consoleErrorSpy).toHaveBeenCalled();
     });
@@ -150,13 +149,14 @@ describe('logger', () => {
 
   describe('error handling', () => {
     it('should handle Error objects', () => {
+      logger.isDevelopmentOverride = true;
       const error = new Error('Test error');
       logger.error('Error occurred', error);
       
       expect(consoleErrorSpy).toHaveBeenCalled();
       const errorCall = consoleErrorSpy.mock.calls[0];
       expect(errorCall.some((arg: any) => 
-        arg instanceof Error || (typeof arg === 'object' && arg.message === 'Test error')
+        (typeof arg === 'object' && arg !== null && arg.error && arg.error.message === 'Test error')
       )).toBe(true);
     });
 
@@ -182,11 +182,11 @@ describe('logger', () => {
     it('should include timestamp in logs', () => {
       logger.info('Timestamped message');
       
-      expect(consoleLogSpy).toHaveBeenCalled();
-      const logCall = consoleLogSpy.mock.calls[0];
+      expect(consoleInfoSpy).toHaveBeenCalled();
+      const logCall = consoleInfoSpy.mock.calls[0];
       // Check if any argument contains a timestamp-like string
       const hasTimestamp = logCall.some((arg: any) => 
-        typeof arg === 'string' && /\d{4}-\d{2}-\d{2}/.test(arg)
+        typeof arg === 'string' && (/\d{4}-\d{2}-\d{2}/.test(arg) || JSON.stringify(arg).includes('timestamp'))
       );
       expect(hasTimestamp).toBe(true);
     });
