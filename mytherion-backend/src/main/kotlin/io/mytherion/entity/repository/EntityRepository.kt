@@ -49,6 +49,18 @@ interface EntityRepository : JpaRepository<Entity, Long> {
     )
     fun countByProjectAndTypeGrouped(project: Project): List<EntityTypeCount>
 
+    @Query("SELECT COUNT(e) FROM Entity e WHERE e.project = :project AND e.updatedAt >= :since AND e.deletedAt IS NULL")
+    fun countRecentEditsByProject(project: Project, since: java.time.Instant): Long
+
+    @Query("SELECT COUNT(e) FROM Entity e WHERE e.project = :project AND e.createdAt >= :since AND e.deletedAt IS NULL")
+    fun countByProjectAndCreatedAtAfter(project: Project, since: java.time.Instant): Long
+
+    @Query("SELECT e FROM Entity e JOIN FETCH e.project WHERE e.project = :project AND e.deletedAt IS NULL ORDER BY e.updatedAt DESC")
+    fun findRecentEntitiesByProject(
+        project: Project,
+        pageable: org.springframework.data.domain.Pageable
+    ): List<Entity>
+
     // DTO interface for aggregation results
     interface EntityTypeCount {
         fun getType(): EntityType

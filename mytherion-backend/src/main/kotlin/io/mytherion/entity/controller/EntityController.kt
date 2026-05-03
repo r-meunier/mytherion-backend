@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/projects/{projectId}/entities")
 class EntityController(private val entityService: EntityService) {
     private val logger = logger()
 
@@ -22,7 +22,7 @@ class EntityController(private val entityService: EntityService) {
      * List entities in a project with optional filters GET
      * /api/projects/{projectId}/entities?type=CHARACTER&tags=hero,mage&search=gandalf&page=0&size=20
      */
-    @GetMapping("/projects/{projectId}/entities")
+    @GetMapping
     fun listEntities(
         @PathVariable projectId: Long,
         @RequestParam(required = false) type: io.mytherion.entity.model.EntityType?,
@@ -58,7 +58,7 @@ class EntityController(private val entityService: EntityService) {
     }
 
     /** Create a new entity in a project POST /api/projects/{projectId}/entities */
-    @PostMapping("/projects/{projectId}/entities")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun createEntity(
         @PathVariable projectId: Long,
@@ -84,57 +84,67 @@ class EntityController(private val entityService: EntityService) {
         }
     }
 
-    /** Get entity by ID GET /api/entities/{id} */
-    @GetMapping("/entities/{id}")
-    fun getEntity(@PathVariable id: Long): EntityDTO {
-        logger.infoWith("Get entity request", "entityId" to id)
+    /** Get entity by ID GET /api/projects/{projectId}/entities/{id} */
+    @GetMapping("/{id}")
+    fun getEntity(
+        @PathVariable projectId: Long,
+        @PathVariable id: Long
+    ): EntityDTO {
+        logger.infoWith("Get entity request", "projectId" to projectId, "entityId" to id)
 
         return try {
+            // In the future, verify that entity belongs to projectId
             entityService.getEntity(id)
         } catch (e: Exception) {
-            logger.errorWith("Failed to get entity", e, "entityId" to id)
+            logger.errorWith("Failed to get entity", e, "projectId" to projectId, "entityId" to id)
             throw e
         }
     }
 
-    /** Update entity PATCH /api/entities/{id} */
-    @PatchMapping("/entities/{id}")
+    /** Update entity PATCH /api/projects/{projectId}/entities/{id} */
+    @PatchMapping("/{id}")
     fun updateEntity(
+        @PathVariable projectId: Long,
         @PathVariable id: Long,
         @Valid @RequestBody request: UpdateEntityRequest
     ): EntityDTO {
-        logger.infoWith("Update entity request", "entityId" to id)
+        logger.infoWith("Update entity request", "projectId" to projectId, "entityId" to id)
 
         return try {
             entityService.updateEntity(id, request)
         } catch (e: Exception) {
-            logger.errorWith("Failed to update entity", e, "entityId" to id)
+            logger.errorWith("Failed to update entity", e, "projectId" to projectId, "entityId" to id)
             throw e
         }
     }
 
-    /** Delete entity (soft delete) DELETE /api/entities/{id} */
-    @DeleteMapping("/entities/{id}")
+    /** Delete entity (soft delete) DELETE /api/projects/{projectId}/entities/{id} */
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteEntity(@PathVariable id: Long) {
-        logger.infoWith("Delete entity request", "entityId" to id)
+    fun deleteEntity(
+        @PathVariable projectId: Long,
+        @PathVariable id: Long
+    ) {
+        logger.infoWith("Delete entity request", "projectId" to projectId, "entityId" to id)
 
         try {
             entityService.deleteEntity(id)
         } catch (e: Exception) {
-            logger.errorWith("Failed to delete entity", e, "entityId" to id)
+            logger.errorWith("Failed to delete entity", e, "projectId" to projectId, "entityId" to id)
             throw e
         }
     }
 
-    /** Upload image for entity POST /api/entities/{id}/image */
-    @PostMapping("/entities/{id}/image", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
+    /** Upload image for entity POST /api/projects/{projectId}/entities/{id}/image */
+    @PostMapping("/{id}/image", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun uploadImage(
+        @PathVariable projectId: Long,
         @PathVariable id: Long,
         @RequestParam("file") file: MultipartFile
     ): UploadResponse {
         logger.infoWith(
             "Upload image request",
+            "projectId" to projectId,
             "entityId" to id,
             "fileName" to file.originalFilename,
             "fileSize" to file.size,
@@ -143,7 +153,7 @@ class EntityController(private val entityService: EntityService) {
 
         // Validate file
         if (file.isEmpty) {
-            logger.errorWith("File is empty", null, "entityId" to id)
+            logger.errorWith("File is empty", null, "projectId" to projectId, "entityId" to id)
             throw IllegalArgumentException("File is empty")
         }
 
@@ -152,6 +162,7 @@ class EntityController(private val entityService: EntityService) {
             logger.errorWith(
                 "Invalid file type",
                 null,
+                "projectId" to projectId,
                 "entityId" to id,
                 "contentType" to file.contentType
             )
@@ -163,6 +174,7 @@ class EntityController(private val entityService: EntityService) {
             logger.errorWith(
                 "File size exceeds limit",
                 null,
+                "projectId" to projectId,
                 "entityId" to id,
                 "fileSize" to file.size
             )
@@ -172,21 +184,24 @@ class EntityController(private val entityService: EntityService) {
         return try {
             entityService.uploadImage(id, file)
         } catch (e: Exception) {
-            logger.errorWith("Failed to upload image", e, "entityId" to id)
+            logger.errorWith("Failed to upload image", e, "projectId" to projectId, "entityId" to id)
             throw e
         }
     }
 
-    /** Delete image from entity DELETE /api/entities/{id}/image */
-    @DeleteMapping("/entities/{id}/image")
+    /** Delete image from entity DELETE /api/projects/{projectId}/entities/{id}/image */
+    @DeleteMapping("/{id}/image")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteImage(@PathVariable id: Long) {
-        logger.infoWith("Delete image request", "entityId" to id)
+    fun deleteImage(
+        @PathVariable projectId: Long,
+        @PathVariable id: Long
+    ) {
+        logger.infoWith("Delete image request", "projectId" to projectId, "entityId" to id)
 
         try {
             entityService.deleteImage(id)
         } catch (e: Exception) {
-            logger.errorWith("Failed to delete image", e, "entityId" to id)
+            logger.errorWith("Failed to delete image", e, "projectId" to projectId, "entityId" to id)
             throw e
         }
     }

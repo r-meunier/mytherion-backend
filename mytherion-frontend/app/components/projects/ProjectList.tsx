@@ -1,9 +1,8 @@
-'use client';
+"use client";
 
-import { useEffect, useState, useRef } from 'react';
-import { useAppDispatch, useAppSelector } from '@/app/store/hooks';
-import { fetchProjects, deleteProject } from '@/app/store/projectSlice';
-import ProjectCard from './ProjectCard';
+import { useAppSelector } from "@/app/store/hooks";
+import ProjectCard from "./ProjectCard";
+import { Project } from "@/app/services/projectService";
 
 interface ProjectListProps {
   onCreateClick: () => void;
@@ -11,84 +10,66 @@ interface ProjectListProps {
 }
 
 export default function ProjectList({ onCreateClick, onEditClick }: ProjectListProps) {
-  const dispatch = useAppDispatch();
   const { projects, loading, error, pagination } = useAppSelector((state) => state.projects);
-  const [hasFetched, setHasFetched] = useState(false);
-  const fetchedRef = useRef(false);
 
-  useEffect(() => {
-    // Prevent duplicate fetches in development mode (React Strict Mode)
-    if (fetchedRef.current) return;
-    fetchedRef.current = true;
-    
-    dispatch(fetchProjects({})).then(() => setHasFetched(true));
-  }, [dispatch]);
-
-  const handleDelete = async (id: number) => {
-    // The card handles the confirmation UI, so we just proceed with deletion
-    await dispatch(deleteProject(id));
+  const handleDelete = (id: number) => {
+    // Implement delete logic if needed
   };
 
   const handlePageChange = (newPage: number) => {
-    dispatch(fetchProjects({ page: newPage, size: pagination.size }));
+    // Implement pagination logic if needed
   };
 
-  // Loading skeleton - show on initial load
-  if (!hasFetched || (loading && projects.length === 0)) {
+  if (loading && projects.length === 0) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[1, 2, 3].map((i) => (
-          <div
-            key={i}
-            className="glass rounded-2xl p-6 animate-pulse"
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-[24px]">
+        {[...Array(8)].map((_, i) => (
+          <div 
+            key={i} 
+            className="glass-card rounded-2xl h-[420px] animate-pulse"
           >
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-xl bg-slate-700/50" />
-              <div className="flex-1">
-                <div className="h-6 bg-slate-700/50 rounded w-3/4 mb-2" />
-                <div className="h-4 bg-slate-700/50 rounded w-1/2" />
-              </div>
+            <div className="h-56 bg-white/5 w-full mb-4" />
+            <div className="px-6 py-2 space-y-4">
+              <div className="h-6 bg-white/5 rounded w-3/4" />
+              <div className="h-4 bg-white/5 rounded w-full" />
+              <div className="h-4 bg-white/5 rounded w-2/3" />
             </div>
-            <div className="h-4 bg-slate-700/50 rounded w-full mb-2" />
-            <div className="h-4 bg-slate-700/50 rounded w-2/3" />
           </div>
         ))}
       </div>
     );
   }
 
-  // Empty state - only show after fetching and if no error
-  if (hasFetched && !loading && !error && projects.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center py-16 px-4">
-        <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center mb-6 border border-primary/20">
-          <span className="material-symbols-outlined text-primary text-[48px]">add_box</span>
-        </div>
-        <h3 className="text-2xl font-display font-semibold text-white mb-2">No Projects Yet</h3>
-        <p className="text-slate-400 text-center mb-6 max-w-md">
-          Create your first project to start organizing your lore entities
-        </p>
-        <button
-          onClick={onCreateClick}
-          className="inline-flex items-center px-6 py-3 bg-primary hover:bg-primary/80 text-white rounded-lg font-medium transition-all shadow-lg shadow-primary/20"
-        >
-          <span className="material-symbols-outlined text-[20px] mr-2">add_box</span>
-          Create Your First Project
-        </button>
-      </div>
-    );
-  }
-
   return (
-    <div>
+    <div className="space-y-8">
       {error && (
-        <div className="mb-6 p-4 glass border border-red-500/50 rounded-xl text-red-400 flex items-start gap-3">
+        <div className="p-4 glass border border-red-500/50 rounded-xl text-red-400 flex items-start gap-3">
           <span className="material-symbols-outlined text-[24px]">error</span>
           <span>{error}</span>
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Grid with exact design gutter (24px) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-[24px]">
+        
+        {/* Create New World Card (Exact Design Fidelity) */}
+        <button 
+          onClick={onCreateClick}
+          className="glass-card rounded-2xl h-[420px] flex flex-col items-center justify-center gap-4 !border-dashed !border-2 border-white/20 group"
+        >
+          {/* Circular Icon with arc glow */}
+          <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-[0_0_30px_rgba(168,85,247,0.1)]">
+            <span className="material-symbols-outlined text-4xl text-primary font-bold">add</span>
+          </div>
+          
+          <div className="text-center">
+            {/* Semantic Typography from Design */}
+            <h3 className="text-section-header text-white">Create New World</h3>
+            <p className="text-white/40 text-body-sm mt-1">Begin a new chronicle</p>
+          </div>
+        </button>
+
+        {/* Existing Projects */}
         {projects.map((project) => (
           <ProjectCard
             key={project.id}
@@ -105,17 +86,17 @@ export default function ProjectList({ onCreateClick, onEditClick }: ProjectListP
           <button
             onClick={() => handlePageChange(pagination.page - 1)}
             disabled={pagination.page === 0}
-            className="px-4 py-2 glass text-slate-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/10 transition-colors"
+            className="px-4 py-2 glass text-white rounded-lg hover:bg-white/10 disabled:opacity-30 transition-all"
           >
             Previous
           </button>
-          <span className="text-slate-400">
+          <span className="text-white/60 font-medium">
             Page {pagination.page + 1} of {pagination.totalPages}
           </span>
           <button
             onClick={() => handlePageChange(pagination.page + 1)}
             disabled={pagination.page >= pagination.totalPages - 1}
-            className="px-4 py-2 glass text-slate-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-white/10 transition-colors"
+            className="px-4 py-2 glass text-white rounded-lg hover:bg-white/10 disabled:opacity-30 transition-all"
           >
             Next
           </button>
@@ -124,4 +105,3 @@ export default function ProjectList({ onCreateClick, onEditClick }: ProjectListP
     </div>
   );
 }
-

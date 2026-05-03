@@ -56,7 +56,7 @@ export default function EntitiesPage() {
   if (loading && !currentProject) {
     return (
       <div className="relative z-10 flex h-screen overflow-hidden">
-        <DualSidebar activeSection="entities" activeIcon="projects" />
+        <DualSidebar activeSection="entities" projectId={projectId} />
         <main className="flex-1 flex flex-col overflow-hidden">
           <DashboardHeader />
           <div className="flex-1 flex items-center justify-center">
@@ -70,7 +70,7 @@ export default function EntitiesPage() {
   if (error && !currentProject) {
     return (
       <div className="relative z-10 flex h-screen overflow-hidden">
-        <DualSidebar activeSection="entities" activeIcon="projects" />
+        <DualSidebar activeSection="entities" projectId={projectId} />
         <main className="flex-1 flex flex-col overflow-hidden">
           <DashboardHeader />
           <div className="flex-1 flex items-center justify-center">
@@ -97,10 +97,7 @@ export default function EntitiesPage() {
     <div className="relative z-10 flex h-screen overflow-hidden">
       <DualSidebar 
         activeSection="entities"
-        activeIcon="projects"
-        navItems={projectNavItems}
-        managementItems={managementItems}
-        subTitle={`PROJECT: ${currentProject.name.toUpperCase()}`}
+        projectId={projectId}
       />
       
       <main className="flex-1 flex flex-col overflow-hidden">

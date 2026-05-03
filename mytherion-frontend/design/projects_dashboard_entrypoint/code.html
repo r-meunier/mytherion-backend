@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mytherion | Your Worlds</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;family=Inter:wght@400;700&amp;family=Great+Vibes&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-container": "#e3aa00",
+                      "primary": "#ddb7ff",
+                      "error": "#ffb4ab",
+                      "inverse-primary": "#842bd2",
+                      "tertiary-container": "#bd871a",
+                      "on-primary-container": "#400071",
+                      "inverse-on-surface": "#342e38",
+                      "on-error-container": "#ffdad6",
+                      "error-container": "#93000a",
+                      "outline": "#988d9f",
+                      "on-surface": "#eadfed",
+                      "on-secondary-container": "#5a4100",
+                      "on-tertiary": "#432c00",
+                      "on-primary-fixed": "#2c0051",
+                      "outline-variant": "#4d4354",
+                      "primary-fixed-dim": "#ddb7ff",
+                      "on-secondary": "#402d00",
+                      "tertiary": "#fabc4e",
+                      "secondary": "#ffc640",
+                      "on-error": "#690005",
+                      "on-secondary-fixed": "#261a00",
+                      "inverse-surface": "#eadfed",
+                      "surface-container-low": "#1f1a23",
+                      "tertiary-fixed-dim": "#fabc4e",
+                      "surface-dim": "#16111b",
+                      "secondary-fixed": "#ffdf9f",
+                      "primary-fixed": "#f0dbff",
+                      "surface-tint": "#ddb7ff",
+                      "surface-variant": "#39323d",
+                      "primary-container": "#b76dff",
+                      "on-tertiary-container": "#3a2600",
+                      "on-surface-variant": "#cfc2d6",
+                      "on-primary": "#490080",
+                      "surface-container-high": "#2e2832",
+                      "surface-container-highest": "#39323d",
+                      "on-tertiary-fixed-variant": "#604100",
+                      "on-tertiary-fixed": "#281900",
+                      "on-secondary-fixed-variant": "#5c4300",
+                      "on-primary-fixed-variant": "#6900b3",
+                      "tertiary-fixed": "#ffdead",
+                      "surface-container-lowest": "#110c15",
+                      "surface": "#16111b",
+                      "on-background": "#eadfed",
+                      "secondary-fixed-dim": "#f9bd22",
+                      "surface-bright": "#3d3741",
+                      "surface-container": "#231e27",
+                      "background": "#16111b"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-sm": "0.75rem",
+                      "sidebar-expanded": "14rem",
+                      "stack-lg": "2rem",
+                      "gutter": "1.5rem",
+                      "sidebar-collapsed": "5rem",
+                      "stack-md": "1.5rem",
+                      "container-padding": "2rem"
+              },
+              "fontFamily": {
+                      "label-caps": ["Inter"],
+                      "display-md": ["Outfit"],
+                      "body-sm": ["Inter"],
+                      "script-quote": ["Great Vibes"],
+                      "display-lg": ["Outfit"],
+                      "section-header": ["Outfit"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "label-caps": ["10px", {"lineHeight": "1", "letterSpacing": "0.2em", "fontWeight": "700"}],
+                      "display-md": ["30px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                      "body-sm": ["13px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "script-quote": ["24px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                      "display-lg": ["36px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                      "section-header": ["18px", {"lineHeight": "1.5", "fontWeight": "700"}],
+                      "body-md": ["14px", {"lineHeight": "1.6", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        body {
+            background-color: #16111b;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(168, 85, 247, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(227, 170, 0, 0.1) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(168, 85, 247, 0.5);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+            transform: translateY(-4px);
+        }
+        .sidebar-rail {
+            width: 80px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface antialiased overflow-x-hidden">
+<!-- Global App Shell Layout -->
+<div class="flex min-h-screen">
+<!-- Left Sidebar Rail (Fixed 80px) -->
+<aside class="sidebar-rail fixed left-0 top-0 h-full z-50 flex flex-col items-center py-6 gap-8">
+<div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(221,183,255,0.4)]">
+<span class="material-symbols-outlined text-on-primary text-3xl">auto_awesome</span>
+</div>
+<nav class="flex flex-col gap-6">
+<button class="w-12 h-12 rounded-lg flex items-center justify-center text-primary bg-primary/10 border-l-4 border-primary">
+<span class="material-symbols-outlined">public</span>
+</button>
+<button class="w-12 h-12 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined">library_books</span>
+</button>
+<button class="w-12 h-12 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined">auto_stories</span>
+</button>
+<button class="w-12 h-12 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined">history_edu</span>
+</button>
+</nav>
+<div class="mt-auto flex flex-col gap-6">
+<button class="w-12 h-12 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<img alt="User Profile" class="w-10 h-10 rounded-full border border-white/20" data-alt="A high-quality studio portrait of a modern user avatar, featuring a person with soft cinematic lighting and a neutral background. The image is crisp and clean, reflecting a professional user profile within a high-tech digital environment, maintaining the dark and premium aesthetic of the Mytherion platform with subtle purple rim lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCopRLEZJcIZJOXbys4NP8dAOp1G6Xo6GVE2P375WOTGJ3NkhcRxmKWcVotEr_4pVZBQcubmOSwh51GcGBBdvRMffYaoylFwUu1fPRCt7iJpLc48M1r4XrER6e9Bk3mJEG7MiKQPXApN7BLeVk4MvMdiMUwvwrUB-bu1vrxVEc8S80BXBdd4S6sMBv4QNx3AEH-Bd2bTLEppgJ_Omdgc7CoU0bk51TAweC_y1IJE_SmqjOuLENg9r40LXhSbj24muGyYViHGvi0l81"/>
+</div>
+</aside>
+<!-- Inner Sidebar (Fixed 224px / 14rem) -->
+<aside class="fixed left-20 top-0 h-full z-40 bg-black/40 backdrop-blur-xl w-56 border-r border-white/10 flex flex-col pt-6 font-display-md">
+<div class="px-6 mb-8">
+<h2 class="text-2xl font-bold tracking-tighter text-white drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]">Mytherion</h2>
+<p class="text-xs text-white/40 uppercase tracking-widest mt-1">Archivist Level 4</p>
+</div>
+<div class="px-4 space-y-1">
+<!-- Navigation Tab: Worlds (Active) -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-gradient-to-r from-purple-500/20 to-transparent border-l-4 border-purple-500 text-purple-100 group" href="#">
+<span class="material-symbols-outlined text-purple-400 group-hover:scale-110 duration-200">auto_awesome</span>
+<span class="text-sm font-medium">Worlds</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-white/60 hover:text-white/90 hover:bg-white/5 transition-all duration-300 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 duration-200">menu_book</span>
+<span class="text-sm font-medium">Lorebook</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-white/60 hover:text-white/90 hover:bg-white/5 transition-all duration-300 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 duration-200">history_edu</span>
+<span class="text-sm font-medium">Timeline</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-white/60 hover:text-white/90 hover:bg-white/5 transition-all duration-300 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 duration-200">group</span>
+<span class="text-sm font-medium">Characters</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-white/60 hover:text-white/90 hover:bg-white/5 transition-all duration-300 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 duration-200">map</span>
+<span class="text-sm font-medium">Atlas</span>
+</a>
+</div>
+<div class="mt-8 px-6">
+<button class="w-full bg-primary text-on-primary-container font-bold py-3 rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-transform text-sm">
+                    Create New Project
+                </button>
+</div>
+<div class="mt-auto p-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-white/40 hover:text-white/80 transition-colors text-sm" href="#">
+<span class="material-symbols-outlined text-xl">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-lg text-white/40 hover:text-white/80 transition-colors text-sm" href="#">
+<span class="material-symbols-outlined text-xl">help_outline</span>
+<span>Support</span>
+</a>
+</div>
+</aside>
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 right-0 left-0 pl-[21rem] pr-8 h-16 bg-black/20 backdrop-blur-md border-b border-white/10 flex justify-between items-center z-30">
+<div class="flex items-center gap-8">
+<div class="flex gap-6">
+<a class="font-medium text-sm text-purple-400 border-b-2 border-purple-500 pb-1" href="#">Dashboard</a>
+<a class="font-medium text-sm text-white/70 hover:text-purple-300 duration-200" href="#">Community</a>
+<a class="font-medium text-sm text-white/70 hover:text-purple-300 duration-200" href="#">Assets</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/40 text-sm">search</span>
+<input class="bg-white/5 border-none rounded-full pl-10 pr-4 py-1.5 text-sm w-64 focus:ring-1 focus:ring-primary/50 text-white placeholder-white/30" placeholder="Search archives..." type="text"/>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-white/70 hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-white/70 hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+<button class="bg-primary/20 text-primary border border-primary/30 px-4 py-1.5 rounded-lg text-sm font-bold hover:bg-primary/30 transition-all">
+                    New Project
+                </button>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 ml-[21rem] mt-16 p-stack-lg min-h-screen">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-stack-lg">
+<div>
+<h1 class="font-display-lg text-display-lg text-on-surface">Your Worlds</h1>
+<p class="text-white/50 mt-1">Access and manage your multi-verse projects.</p>
+</div>
+<!-- Filter Bar -->
+<div class="flex items-center gap-3 p-1.5 glass-card rounded-full">
+<button class="px-5 py-1.5 rounded-full bg-primary text-on-primary-container text-sm font-bold shadow-lg">All Projects</button>
+<button class="px-5 py-1.5 rounded-full text-white/60 hover:text-white hover:bg-white/5 text-sm font-medium transition-colors">Recently Edited</button>
+<button class="px-5 py-1.5 rounded-full text-white/60 hover:text-white hover:bg-white/5 text-sm font-medium transition-colors">Favorites</button>
+<div class="w-px h-6 bg-white/10 mx-1"></div>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-white/60 hover:text-white">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+</div>
+</div>
+<!-- Library Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-gutter">
+<!-- Create New World Card (Empty State Action) -->
+<button class="glass-card rounded-2xl h-[420px] flex flex-col items-center justify-center gap-4 border-dashed border-2 border-white/10 hover:border-primary/50 group">
+<div class="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-[0_0_30px_rgba(168,85,247,0.1)]">
+<span class="material-symbols-outlined text-4xl text-primary">add</span>
+</div>
+<div class="text-center">
+<h3 class="font-section-header text-section-header text-white">Create New World</h3>
+<p class="text-white/40 text-body-sm mt-1">Begin a new chronicle</p>
+</div>
+</button>
+<!-- World Card 1: Aethelgard Reborn -->
+<div class="glass-card rounded-2xl overflow-hidden group cursor-pointer flex flex-col">
+<div class="relative h-56 w-full overflow-hidden">
+<img alt="Aethelgard Reborn" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A cinematic digital landscape of a floating celestial island called Aethelgard. The scene is bathed in deep purples and ethereal blues with glowing magical ley lines crisscrossing the rocky terrain. A massive, shattered moon hangs in the star-filled sky. The lighting is dramatic and mystical, evoking a sense of ancient high-fantasy adventure and digital alchemy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCF1oUEVgWsE7erK_ShruATA4wV1-2bleXiAreToITou3C8wZLMBXu7YQ6Ff07csHL90tWQ5aYlGhGlLEeeFrdW_sYvYX3dMtFdsFfwTktUJhe4tCkRv_Qo7O0xk5tv5uhHwVRUOWXldYanoSn-LG5ikF0zjAoPGoqyIrawpqQg0xstt_qvyPuYUILeeWg5YS8mKRM50fTB5RsSabJUhZlplOPg9HgsUJ3dZzPGQ2aNN8XGhwI87gCyNenSzILQeS0EMMCNbc2ip6yn"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#16111b] via-transparent to-transparent opacity-60"></div>
+<div class="absolute top-4 right-4">
+<span class="bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-secondary border border-secondary/20 flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                                PRIMARY
+                            </span>
+</div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-section-header text-xl text-white group-hover:text-primary transition-colors">Aethelgard Reborn</h3>
+<span class="material-symbols-outlined text-white/20 hover:text-white transition-colors">more_vert</span>
+</div>
+<p class="text-white/50 text-body-sm line-clamp-2 mb-6">A shattered realm attempting to mend itself through forbidden solar magic and forgotten technology.</p>
+<div class="mt-auto space-y-4">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1.5 text-xs text-white/40">
+<span class="material-symbols-outlined text-sm">database</span>
+<span>1,420 Entities</span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-white/40">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span>2h ago</span>
+</div>
+</div>
+<div class="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+<div class="w-[65%] h-full bg-gradient-to-r from-primary to-purple-400 shadow-[0_0_8px_rgba(168,85,247,0.5)]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- World Card 2: Obsidian Depths -->
+<div class="glass-card rounded-2xl overflow-hidden group cursor-pointer flex flex-col">
+<div class="relative h-56 w-full overflow-hidden">
+<img alt="Obsidian Depths" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A dark and cavernous underground world made of reflective obsidian and glowing crystal formations. Deep amber and gold light spills from cracks in the ground, illuminating ancient ruins. The style is moody and high-contrast, representing a subterranean fantasy setting with a premium digital finish and intricate architectural details." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGwCD-6H2m3-0h8SfHigQrcJqVzvDuBZDezE0TvhYuYPl_AcveQQSspn8p0HwfK1FNNdqj1RnYMW0RcYYDKzN8brVvQeWFQGsTecUdRkY9LbrdfDl5tjMdrNhHlIucFmuasfgqHouNp399DCP8C6Gz6oArDgF4u9jI4tzHMxY8t48FgIwWMeCMYHEapdk3A2M1y8p0muFVKUQiNuJNtHetiwJ2hagI_pY0PbWMIE2apNminIKMTJQ8f2bwLTcMrE5H0JfNMeBA78EU"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#16111b] via-transparent to-transparent opacity-60"></div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-section-header text-xl text-white group-hover:text-primary transition-colors">Obsidian Depths</h3>
+<span class="material-symbols-outlined text-white/20 hover:text-white transition-colors">more_vert</span>
+</div>
+<p class="text-white/50 text-body-sm line-clamp-2 mb-6">An infinite subterranean empire where light is the most valuable currency and shadows have teeth.</p>
+<div class="mt-auto space-y-4">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1.5 text-xs text-white/40">
+<span class="material-symbols-outlined text-sm">database</span>
+<span>892 Entities</span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-white/40">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span>1d ago</span>
+</div>
+</div>
+<div class="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+<div class="w-[40%] h-full bg-gradient-to-r from-primary to-purple-400 shadow-[0_0_8px_rgba(168,85,247,0.5)]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- World Card 3: Neon Nebula -->
+<div class="glass-card rounded-2xl overflow-hidden group cursor-pointer flex flex-col">
+<div class="relative h-56 w-full overflow-hidden">
+<img alt="Neon Nebula" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A vibrant space-opera setting featuring a dense, colorful nebula filled with swirling pink, blue, and violet gas clouds. Futuristic space stations are silhouetted against the glowing cosmic backdrop. The mood is epic and expansive, using high-saturation colors and a clean digital aesthetic to depict a high-tech sci-fi universe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBH5ibpqCunIHb1VauBGb_FJlrq3B83OhHchAuPVLO-TkT5ANpGl8_GtcctUJpqIblxE7gLX6GGVhqmgruNEvY33gr2dWjwz-wfq3eys-yl0njlmalJ5AKoUGqlRf1Pd-GOlFynbRX5qWvq64BtjJor8ZFxk8ytrLMo7Cp6uDykEyQFe5tkzjcC2g45IL8caeP5eIRfRcEohtPDj1XAWxJMT_YEfhoXmioBIZdQiIlk_eIgS76QyV0suSRVIFTl4738131J4_0SnMzJ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#16111b] via-transparent to-transparent opacity-60"></div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-section-header text-xl text-white group-hover:text-primary transition-colors">Neon Nebula</h3>
+<span class="material-symbols-outlined text-white/20 hover:text-white transition-colors">more_vert</span>
+</div>
+<p class="text-white/50 text-body-sm line-clamp-2 mb-6">A space-opera setting where planets are grown from stardust and corporate gods rule the stars.</p>
+<div class="mt-auto space-y-4">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1.5 text-xs text-white/40">
+<span class="material-symbols-outlined text-sm">database</span>
+<span>2,105 Entities</span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-white/40">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span>4d ago</span>
+</div>
+</div>
+<div class="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+<div class="w-[85%] h-full bg-gradient-to-r from-primary to-purple-400 shadow-[0_0_8px_rgba(168,85,247,0.5)]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- World Card 4: Whispering Wilds -->
+<div class="glass-card rounded-2xl overflow-hidden group cursor-pointer flex flex-col">
+<div class="relative h-56 w-full overflow-hidden">
+<img alt="Whispering Wilds" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="An enchanted, bioluminescent forest at night. Huge, ancient trees with glowing leaves tower over a misty forest floor carpeted in magical flora. Soft green and teal light filters through the canopy, creating a peaceful yet mysterious atmosphere. The visual style is lush and detailed, emphasizing the organic high-fantasy theme with a modern digital polish." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwEG8oCeMUKDVgdy2IsWwf9ZYN2uyQoEowHkmn7FKO5QF4SWvDJIdPSq7keiHQxc4Vn2o1DUBsxKfAaeP-F9WNXgHZrqUgXNpYA5qF2YNDMTKbH7WV4XeruwoNnL9MMbG07w8oGH0FHW3tDvp1_WO86Of0ztpgefQQkrmFtemTcv9XgejHSzJg4FZa2b-mkEYr3BrQXs6iemewW6P1WwvlmNWoRvmEocJdQyxtNwTWo3X06GH-9I17wqOWwpyJmBbM7vGfxfQ90JjU"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#16111b] via-transparent to-transparent opacity-60"></div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-section-header text-xl text-white group-hover:text-primary transition-colors">Whispering Wilds</h3>
+<span class="material-symbols-outlined text-white/20 hover:text-white transition-colors">more_vert</span>
+</div>
+<p class="text-white/50 text-body-sm line-clamp-2 mb-6">A sentient forest ecosystem that communicates through bioluminescent pulses and fungal networks.</p>
+<div class="mt-auto space-y-4">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1.5 text-xs text-white/40">
+<span class="material-symbols-outlined text-sm">database</span>
+<span>540 Entities</span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-white/40">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span>1w ago</span>
+</div>
+</div>
+<div class="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+<div class="w-[30%] h-full bg-gradient-to-r from-primary to-purple-400 shadow-[0_0_8px_rgba(168,85,247,0.5)]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

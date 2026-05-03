@@ -1,142 +1,130 @@
 "use client";
 
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
 import { checkAuth } from "./store/authSlice";
 import { fetchDashboardStats } from "./store/dashboardSlice";
+import { fetchProjects, clearCurrentProject } from "./store/projectSlice";
+import { useRouter } from "next/navigation";
 import DualSidebar from "./components/DualSidebar";
 import DashboardHeader from "./components/DashboardHeader";
-import StatCard from "./components/ui/StatCard";
-import RecentChronicles from "./components/dashboard/RecentChronicles";
-import WorldMapCard from "./components/dashboard/WorldMapCard";
-import ArcaneTools from "./components/dashboard/ArcaneTools";
-import PromptCard from "./components/dashboard/PromptCard";
+import ProjectList from "./components/projects/ProjectList";
+import ProjectModal from "./components/projects/ProjectModal";
 
 export default function Home() {
   const dispatch = useAppDispatch();
-  const { stats, loading } = useAppSelector((state) => state.dashboard);
+  const router = useRouter();
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [activeFilter, setActiveFilter] = useState("all");
 
-  // Check authentication and fetch stats on mount
+  const { isAuthenticated, isInitialized } = useAppSelector((state) => state.auth);
+
+  // Check authentication on mount
   useEffect(() => {
     dispatch(checkAuth());
-    dispatch(fetchDashboardStats());
   }, [dispatch]);
 
-  const formatNumber = (num: number | undefined) => {
-    if (num === undefined) return "...";
-    return new Intl.NumberFormat().format(num);
-  };
+  // Fetch projects only after auth is initialized
+  useEffect(() => {
+    if (isInitialized) {
+      if (isAuthenticated) {
+        dispatch(fetchDashboardStats());
+        dispatch(fetchProjects({ page: 0, size: 8 }));
+        dispatch(clearCurrentProject());
+      } else {
+        router.push("/login");
+      }
+    }
+  }, [dispatch, isInitialized, isAuthenticated, router]);
 
   return (
-    <div className="relative z-10 flex h-screen overflow-hidden">
-      {/* Dual Sidebar */}
-      <DualSidebar activeSection="dashboard" />
+    <div className="relative z-10 flex h-screen overflow-hidden bg-[#16111B]">
+      {/* Background Ley Lines - Exact Design Atmosphere */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 bg-[#0F0F23]">
+        <div className="absolute top-[-20%] left-[-10%] w-[80%] h-[100%] bg-[#a855f7]/15 rounded-full blur-[180px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[70%] bg-[#fbbf24]/5 rounded-full blur-[160px]" />
+      </div>
+
+      {/* Dual Sidebar (Exact Design Specs: 21rem / 336px) */}
+      <DualSidebar 
+        activeSection="projects" 
+        activeIcon="projects"
+        onCreateProject={() => setShowCreateModal(true)}
+      />
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col overflow-hidden">
-        {/* Header */}
-        <DashboardHeader />
+      <main className="flex-1 flex flex-col overflow-hidden relative">
+        {/* Header (Matching Tabbed Design) */}
+        <DashboardHeader onCreateProject={() => setShowCreateModal(true)} />
 
-        {/* Dashboard Content */}
-        <div className="flex-1 overflow-y-auto p-8 space-y-8">
-          {/* Welcome Section */}
-          <div className="flex items-end justify-between">
+        {/* Dashboard Content - Matching Design p-stack-lg (48px) */}
+        <div className="flex-1 overflow-y-auto p-[48px] space-y-[48px] scroll-smooth relative z-10 custom-scrollbar">
+          
+          {/* Section Header & Filter Bar (Exact Match) */}
+          <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-12">
             <div>
-              <h2 className="text-h1 text-3xl">
-                Welcome back, Chronicler
-              </h2>
-              <p className="text-page-subheader mt-1">
-                Your worlds are waiting for your next stroke of genius.
+              <h1 className="text-display-lg text-[#E6E1E5]">
+                Your Worlds
+              </h1>
+              <p className="text-white/40 mt-1 font-medium tracking-wide">
+                Access and manage your multi-verse projects.
               </p>
             </div>
-            <button className="bg-primary hover:bg-primary/80 text-white px-5 py-2.5 rounded-lg flex items-center space-x-2 transition-all shadow-lg shadow-primary/20">
-              <span className="material-symbols-outlined text-[20px]">add_box</span>
-              <span className="font-semibold">Create New Entry</span>
-            </button>
-          </div>
-
-          {/* Stat Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <StatCard
-              title="Total Entities"
-              value={formatNumber(stats?.totalEntities)}
-              subtitle={stats && stats.entitiesThisWeek > 0 ? `+${formatNumber(stats.entitiesThisWeek)} this week` : undefined}
-              loading={loading}
-              icon="auto_stories"
-              badges={
-                <div className="flex -space-x-2">
-                  <div className="w-6 h-6 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center">
-                    <span className="material-symbols-outlined text-primary" style={{ fontSize: '12px' }}>
-                      person
-                    </span>
-                  </div>
-                  <div className="w-6 h-6 rounded-full bg-blue-500/20 border border-blue-500/40 flex items-center justify-center">
-                    <span className="material-symbols-outlined text-blue-500" style={{ fontSize: '12px' }}>
-                      location_on
-                    </span>
-                  </div>
-                  <div className="w-6 h-6 rounded-full bg-secondary/20 border border-secondary/40 flex items-center justify-center">
-                    <span className="material-symbols-outlined text-secondary" style={{ fontSize: '12px' }}>
-                      diamond
-                    </span>
-                  </div>
-                </div>
-              }
-            />
-
-            <StatCard
-              title="Recent Edits"
-              value={formatNumber(stats?.recentEdits)}
-              subtitle="Past 24h"
-              loading={loading}
-              subtitleColor="text-slate-500"
-              icon="history_edu"
-              progressBar={{
-                value: 65,
-                label: "Active Session",
-              }}
-            />
-
-            <StatCard
-              title="Total Projects"
-              value={formatNumber(stats?.totalProjects)}
-              subtitle="Active Worlds"
-              loading={loading}
-              subtitleColor="text-primary"
-              icon="public"
-              badges={
-                <div className="text-micro-badge text-slate-500 tracking-tight">
-                  Across all dimensions
-                </div>
-              }
-            />
-          </div>
-
-          {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left Column - Recent Chronicles */}
-            <div className="lg:col-span-2">
-              <RecentChronicles />
-            </div>
-
-            {/* Right Column - Map, Tools, Prompt */}
-            <div className="space-y-8">
-              <WorldMapCard />
-              <ArcaneTools />
-              <PromptCard />
+            
+            {/* Filter Bar (Precise Design Specs) */}
+            <div className="flex items-center gap-2 p-1 glass-card rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.6)] border-white/5 bg-black/40">
+              <button 
+                onClick={() => setActiveFilter("all")}
+                className={`px-5 py-1.5 rounded-full text-[13px] font-bold transition-all duration-300 ${
+                  activeFilter === "all" 
+                    ? "bg-[#D8B4FE] text-[#581C87] shadow-lg" 
+                    : "text-white/40 hover:text-white hover:bg-white/5"
+                }`}
+              >
+                All Projects
+              </button>
+              <button 
+                onClick={() => setActiveFilter("edited")}
+                className={`px-5 py-1.5 rounded-full text-[13px] font-bold transition-all duration-300 ${
+                  activeFilter === "edited" 
+                    ? "bg-[#D8B4FE] text-[#581C87] shadow-lg" 
+                    : "text-white/40 hover:text-white hover:bg-white/5"
+                }`}
+              >
+                Recently Edited
+              </button>
+              <button 
+                onClick={() => setActiveFilter("favorites")}
+                className={`px-5 py-1.5 rounded-full text-[13px] font-bold transition-all duration-300 ${
+                  activeFilter === "favorites" 
+                    ? "bg-[#D8B4FE] text-[#581C87] shadow-lg" 
+                    : "text-white/40 hover:text-white hover:bg-white/5"
+                }`}
+              >
+                Favorites
+              </button>
+              <div className="w-px h-5 bg-white/10 mx-1"></div>
+              <button className="w-9 h-9 rounded-full flex items-center justify-center text-white/30 hover:text-white hover:bg-white/5 transition-all">
+                <span className="material-symbols-outlined text-[20px]">filter_list</span>
+              </button>
             </div>
           </div>
+
+          {/* Library Grid */}
+          <section>
+            <ProjectList 
+              onCreateClick={() => setShowCreateModal(true)}
+              onEditClick={(id) => { /* Selection handles navigation */ }}
+            />
+          </section>
         </div>
       </main>
 
-      {/* Mobile Menu Button */}
-      <div className="fixed bottom-6 right-6 md:hidden">
-        <button className="w-14 h-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center">
-          <span className="material-symbols-outlined">menu</span>
-        </button>
-      </div>
+      {/* Creation Modal */}
+      <ProjectModal 
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+      />
     </div>
   );
 }
-
-

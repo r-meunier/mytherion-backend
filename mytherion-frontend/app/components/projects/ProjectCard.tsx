@@ -1,8 +1,9 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Project } from '@/app/services/projectService';
-import Link from 'next/link';
+import { useState } from "react";
+import { Project } from "@/app/services/projectService";
+import Link from "next/link";
+import { useIsMounted } from "@/app/hooks/useIsMounted";
 
 interface ProjectCardProps {
   project: Project;
@@ -11,176 +12,95 @@ interface ProjectCardProps {
 }
 
 export default function ProjectCard({ project, onEdit, onDelete }: ProjectCardProps) {
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const isMounted = useIsMounted();
 
   const formatDate = (dateString: string) => {
+    if (!isMounted) return "";
     const date = new Date(dateString);
     const now = new Date();
     const diffTime = Math.abs(now.getTime() - date.getTime());
     const diffHours = Math.ceil(diffTime / (1000 * 60 * 60));
     
-    if (diffHours < 24) {
-      return `${diffHours}h ago`;
-    } else if (diffHours < 48) {
-      return 'Yesterday';
-    } else {
-      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    }
+    if (diffHours < 24) return `${diffHours}h ago`;
+    if (diffHours < 48) return "Yesterday";
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
   };
 
-  const handleDeleteClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setShowDeleteConfirm(true);
+  // Placeholder images based on project ID
+  const getPlaceholderImage = (id: number) => {
+    const images = [
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuCF1oUEVgWsE7erK_ShruATA4wV1-2bleXiAreToITou3C8wZLMBXu7YQ6Ff07csHL90tWQ5aYlGhGlLEeeFrdW_sYvYX3dMtFdsFfwTktUJhe4tCkRv_Qo7O0xk5tv5uhHwVRUOWXldYanoSn-LG5ikF0zjAoPGoqyIrawpqQg0xstt_qvyPuYUILeeWg5YS8mKRM50fTB5RsSabJUhZlplOPg9HgsUJ3dZzPGQ2aNN8XGhwI87gCyNenSzILQeS0EMMCNbc2ip6yn",
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuAGwCD-6H2m3-0h8SfHigQrcJqVzvDuBZDezE0TvhYuYPl_AcveQQSspn8p0HwfK1FNNdqj1RnYMW0RcYYDKzN8brVvQeWFQGsTecUdRkY9LbrdfDl5tjMdrNhHlIucFmuasfgqHouNp399DCP8C6Gz6oArDgF4u9jI4tzHMxY8t48FgIwWMeCMYHEapdk3A2M1y8p0muFVKUQiNuJNtHetiwJ2hagI_pY0PbWMIE2apNminIKMTJQ8f2bwLTcMrE5H0JfNMeBA78EU",
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuBH5ibpqCunIHb1VauBGb_FJlrq3B83OhHchAuPVLO-TkT5ANpGl8_GtcctUJpqIblxE7gLX6GGVhqmgruNEvY33gr2dWjwz-wfq3eys-yl0njlmalJ5AKoUGqlRf1Pd-GOlFynbRX5qWvq64BtjJor8ZFxk8ytrLMo7Cp6uDykEyQFe5tkzjcC2g45IL8caeP5eIRfRcEohtPDj1XAWxJMT_YEfhoXmioBIZdQiIlk_eIgS76QyV0suSRVIFTl4738131J4_0SnMzJ",
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuCwEG8oCeMUKDVgdy2IsWwf9ZYN2uyQoEowHkmn7FKO5QF4SWvDJIdPSq7keiHQxc4Vn2o1DUBsxKfAaeP-F9WNXgHZrqUgXNpYA5qF2YNDMTKbH7WV4XeruwoNnL9MMbG07w8oGH0FHW3tDvp1_WO86Of0ztpgefQQkrmFtemTcv9XgejHSzJg4FZa2b-mkEYr3BrQXs6iemewW6P1WwvlmNWoRvmEocJdQyxtNwTWo3X06GH-9I17wqOWwpyJmBbM7vGfxfQ90JjU"
+    ];
+    return images[id % images.length];
   };
-
-  const handleConfirmDelete = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    onDelete(project.id);
-    setShowDeleteConfirm(false);
-  };
-
-  const handleCancelDelete = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setShowDeleteConfirm(false);
-  };
-
-  // Placeholder image - in production this would come from project data
-  const projectImage = 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&h=600&fit=crop';
 
   return (
-    <div className={`project-card glass rounded-3xl min-w-[320px] overflow-hidden border border-white/10 transition-all relative ${
-      showDeleteConfirm ? '' : 'group hover:border-primary/40'
-    }`}>
-      {/* Whole-card link wrapper */}
-      {!showDeleteConfirm && (
-        <Link 
-          href={`/projects/${project.id}`} 
-          className="absolute inset-0 z-10 cursor-pointer"
-          aria-label={`View project ${project.name}`}
-        />
-      )}
+    <div className="glass-card rounded-2xl overflow-hidden group cursor-pointer flex flex-col relative h-[420px] shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] border border-white/5 bg-[#16111B]/40">
+      {/* Click overlay */}
+      <Link href={`/projects/${project.id}`} className="absolute inset-0 z-10" />
 
-      {/* Delete Confirmation Overlay */}
-      {showDeleteConfirm && (
-        <div className="absolute inset-0 bg-black/80 backdrop-blur-2xl z-20 flex items-center justify-center p-6 rounded-3xl border-2 border-red-500/50">
-          <div className="text-center space-y-4">
-            <div className="w-16 h-16 rounded-full bg-red-600/20 flex items-center justify-center mx-auto mb-4 border border-red-500/30">
-              <span className="material-symbols-outlined text-red-400 text-[32px]">warning</span>
-            </div>
-            <h3 className="text-xl font-display font-bold text-white">Delete Project?</h3>
-            <p className="text-slate-400 text-sm max-w-xs">
-              Are you sure you want to delete "{project.name}"? This action cannot be undone.
-            </p>
-            <div className="flex gap-3 pt-4">
-              <button
-                onClick={handleCancelDelete}
-                className="flex-1 px-4 py-2.5 glass text-white rounded-lg hover:bg-white/10 transition-all font-semibold"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleConfirmDelete}
-                className="flex-1 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg shadow-lg shadow-red-600/20 transition-all font-semibold"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Image Section */}
-      <div className="relative h-64 overflow-hidden">
+      {/* Hero Image Section */}
+      <div className="relative h-56 w-full overflow-hidden">
         <img 
-          src={projectImage}
+          src={getPlaceholderImage(project.id)}
           alt={project.name}
-          className={`w-full h-full object-cover transition-transform duration-700 ${
-            showDeleteConfirm ? 'grayscale-20' : 'grayscale-20 group-hover:grayscale-0'
-          }`}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
-        <div className="absolute inset-0 bg-linear-to-t from-background-dark via-transparent to-transparent opacity-80" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#16111B] via-transparent to-transparent opacity-80" />
         
         {/* Genre Badge */}
-        <div className="absolute bottom-4 left-6 z-20">
-          <span className="px-3 py-1 bg-primary/20 backdrop-blur-md border border-primary/30 text-primary text-micro-badge rounded-full">
-            {project.genre || 'Unknown'}
+        <div className="absolute top-4 right-4 z-20">
+          <span className="bg-black/60 backdrop-blur-md px-3 py-1 rounded-lg text-[10px] font-black text-secondary border border-secondary/20 flex items-center gap-1.5 uppercase tracking-widest">
+            <span className="material-symbols-outlined text-[12px]">star</span>
+            {project.genre || "Primary"}
           </span>
         </div>
       </div>
 
-      {/* Content Section */}
-      <div className="p-6 space-y-4">
-        <div className="flex justify-between items-start">
-          <div className="flex-1">
-            <h3 className={`text-2xl font-display font-bold text-white transition-colors ${
-              showDeleteConfirm ? '' : 'group-hover:text-primary'
-            }`}>
-              {project.name}
-            </h3>
-            {project.description && (
-              <p className="text-slate-400 text-sm mt-1 line-clamp-2">
-                {project.description}
-              </p>
-            )}
+      {/* Project Details Section (Matching Design Spatial Layout) */}
+      <div className="p-7 flex-1 flex flex-col bg-white/[0.02]">
+        {/* Title and Menu */}
+        <div className="flex justify-between items-start mb-2.5">
+          <h3 className="text-section-header font-bold text-[#E6E1E5] group-hover:text-primary transition-colors duration-300 truncate pr-4">
+            {project.name}
+          </h3>
+          <button className="text-white/20 hover:text-white transition-colors relative z-20">
+            <span className="material-symbols-outlined text-[20px]">more_vert</span>
+          </button>
+        </div>
+
+        {/* Description */}
+        <p className="text-white/40 text-body-sm leading-relaxed line-clamp-2 mb-6 font-medium">
+          {project.description || "An infinite realm awaiting your narrative touch. Shape its destinies and record its histories."}
+        </p>
+
+        {/* Metadata Footer */}
+        <div className="mt-auto space-y-4">
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2 text-[11px] font-bold text-white/30 uppercase tracking-wider">
+              <span className="material-symbols-outlined text-[16px] opacity-40">database</span>
+              <span>1,420 Entities</span>
+            </div>
+            <div className="flex items-center gap-2 text-[11px] font-bold text-white/30 uppercase tracking-wider">
+              <span className="material-symbols-outlined text-[16px] opacity-40">schedule</span>
+              <span>{formatDate(project.updatedAt)}</span>
+            </div>
           </div>
           
-          {/* More Menu Button */}
-          <div className="relative z-20">
-            <button 
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-              }}
-              className="text-slate-500 hover:text-white transition-colors p-1"
-            >
-              <span className="material-symbols-outlined">more_vert</span>
-            </button>
+          {/* Progress Indication */}
+          <div className="relative pt-1">
+            <div className="overflow-hidden h-[3px] flex rounded-full bg-white/5">
+              <div 
+                style={{ width: `${(project.id * 15 % 70) + 25}%` }}
+                className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary/60"
+              />
+            </div>
           </div>
-        </div>
-
-        {/* Stats Footer */}
-        <div className="pt-4 border-t border-white/5 flex flex-wrap gap-2 items-center justify-between text-xs text-slate-400 font-medium">
-          <div className="flex items-center space-x-4">
-            <span className="flex items-center whitespace-nowrap">
-              <span className="material-symbols-outlined text-xs mr-1 text-slate-500">group</span>
-              0 Characters
-            </span>
-            <span className="flex items-center whitespace-nowrap">
-              <span className="material-symbols-outlined text-xs mr-1 text-slate-500">location_on</span>
-              0 Locations
-            </span>
-          </div>
-          <span className="text-slate-600 whitespace-nowrap">Updated {formatDate(project.updatedAt)}</span>
         </div>
       </div>
-
-      {/* Action buttons - shown on hover */}
-      {!showDeleteConfirm && (
-        <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-20">
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              onEdit(project.id);
-            }}
-            className="p-2 rounded-lg glass hover:bg-primary hover:text-white transition-all backdrop-blur-md"
-            title="Edit Project"
-          >
-            <span className="material-symbols-outlined text-[18px]">edit</span>
-          </button>
-          <button
-            onClick={handleDeleteClick}
-            className="p-2 rounded-lg glass hover:bg-red-600 hover:text-white transition-all backdrop-blur-md"
-            title="Delete Project"
-          >
-            <span className="material-symbols-outlined text-[18px]">delete</span>
-          </button>
-        </div>
-      )}
     </div>
   );
 }
-

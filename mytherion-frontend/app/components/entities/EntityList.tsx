@@ -66,7 +66,7 @@ export default function EntityList({ projectId, onCreateClick, onEditClick }: En
   };
 
   const handleDelete = async (entityId: number) => {
-    await dispatch(deleteEntity(entityId));
+    await dispatch(deleteEntity({ projectId, id: entityId }));
     setShowDeleteConfirm(null);
     dispatch(fetchEntities({ projectId, filters, page: currentPage, size: PAGE_SIZE }));
   };

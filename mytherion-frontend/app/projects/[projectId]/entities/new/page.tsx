@@ -45,22 +45,11 @@ export default function NewEntityPage() {
     router.push(`/projects/${projectId}/entities`);
   };
 
-  const projectNavItems = [
-    { id: "overview", label: "Overview", href: `/projects/${projectId}` },
-    { id: "entities", label: "Entities", href: `/projects/${projectId}/entities` },
-    { id: "timeline", label: "Timeline", href: "#" },
-    { id: "maps", label: "Maps", href: "#" },
-  ];
-
-  const managementItems = [
-    { id: "settings", label: "Settings", href: "#" },
-    { id: "export", label: "Export Codex", href: "#" },
-  ];
 
   if (!currentProject) {
     return (
       <div className="relative z-10 flex h-screen overflow-hidden">
-        <DualSidebar activeSection="entities" activeIcon="projects" />
+        <DualSidebar activeSection="entities" projectId={projectId} />
         <main className="flex-1 flex flex-col overflow-hidden">
           <DashboardHeader />
           <div className="flex-1 flex items-center justify-center">
@@ -75,10 +64,7 @@ export default function NewEntityPage() {
     <div className="relative z-10 flex h-screen overflow-hidden">
       <DualSidebar 
         activeSection="entities"
-        activeIcon="projects"
-        navItems={projectNavItems}
-        managementItems={managementItems}
-        subTitle={`PROJECT: ${currentProject.name.toUpperCase()}`}
+        projectId={projectId}
       />
       
       <main className="flex-1 flex flex-col overflow-hidden">

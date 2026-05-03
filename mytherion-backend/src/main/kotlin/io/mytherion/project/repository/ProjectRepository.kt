@@ -17,4 +17,8 @@ interface ProjectRepository : JpaRepository<Project, Long> {
     fun findByIdAndDeletedAtIsNull(id: Long): Project?
 
     fun countByOwnerAndDeletedAtIsNull(owner: User): Long
+    
+    fun existsByIdAndOwnerAndDeletedAtIsNull(id: Long, owner: User): Boolean
+    
+    fun findByIdAndOwnerAndDeletedAtIsNull(id: Long, owner: User): Project?
 }

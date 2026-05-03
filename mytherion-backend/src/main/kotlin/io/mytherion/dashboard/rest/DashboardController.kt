@@ -4,19 +4,25 @@ import io.mytherion.dashboard.dto.DashboardStatsDTO
 import io.mytherion.dashboard.service.DashboardService
 import io.mytherion.logging.logger
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/dashboard")
 class DashboardController(
     private val dashboardService: DashboardService
 ) {
     private val logger = logger()
-
-    @GetMapping("/stats")
+    
+    @GetMapping("/api/dashboard/stats")
     fun getDashboardStats(): DashboardStatsDTO {
-        logger.info("Get dashboard stats request")
+        logger.info("Get global dashboard stats request")
         return dashboardService.getDashboardStats()
+    }
+
+    @GetMapping("/api/projects/{projectId}/dashboard/stats")
+    fun getProjectDashboardStats(@PathVariable projectId: Long): DashboardStatsDTO {
+        logger.info("Get project dashboard stats request for project: $projectId")
+        return dashboardService.getProjectDashboardStats(projectId)
     }
 }

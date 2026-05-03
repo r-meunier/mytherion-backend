@@ -24,6 +24,17 @@ export const fetchDashboardStats = createAsyncThunk(
   }
 );
 
+export const fetchProjectDashboardStats = createAsyncThunk(
+  'dashboard/fetchProjectStats',
+  async (projectId: number, { rejectWithValue }) => {
+    try {
+      return await dashboardService.getProjectStats(projectId);
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch project dashboard stats');
+    }
+  }
+);
+
 const dashboardSlice = createSlice({
   name: 'dashboard',
   initialState,
@@ -43,6 +54,18 @@ const dashboardSlice = createSlice({
         state.stats = action.payload;
       })
       .addCase(fetchDashboardStats.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(fetchProjectDashboardStats.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchProjectDashboardStats.fulfilled, (state, action) => {
+        state.loading = false;
+        state.stats = action.payload;
+      })
+      .addCase(fetchProjectDashboardStats.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

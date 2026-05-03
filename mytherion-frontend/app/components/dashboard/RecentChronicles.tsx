@@ -1,7 +1,7 @@
 "use client";
 import Link from 'next/link';
 import { useAppSelector } from '../../store/hooks';
-import { EntityType } from '../../types/entity';
+import { useIsMounted } from '../../hooks/useIsMounted';
 
 const badgeColors: Record<string, string> = {
   CHARACTER: "bg-primary/10 text-primary border-primary/20",
@@ -15,6 +15,7 @@ const badgeColors: Record<string, string> = {
 
 export default function RecentChronicles() {
   const { stats, loading } = useAppSelector((state) => state.dashboard);
+  const isMounted = useIsMounted();
   const recentEntities = stats?.recentEntities || [];
 
   return (
@@ -53,7 +54,6 @@ export default function RecentChronicles() {
               className="glass p-5 rounded-2xl hover:bg-white/5! transition-all group flex items-start space-x-5 border border-white/10 cursor-pointer"
             >
               {/* Thumbnail */}
-              {/* TODO: Implement real entity images once storage is fully integrated */}
               <div className="w-20 h-20 rounded-xl overflow-hidden shrink-0 border border-white/20 shadow-inner">
                 <img
                   alt={entity.name}
@@ -69,11 +69,9 @@ export default function RecentChronicles() {
                     {entity.name}
                   </h5>
                   <span className="text-timestamp">
-                    {/* TODO: Add 'time ago' formatting for updatedAt */}
-                    {new Date(entity.updatedAt).toLocaleDateString()}
+                    {isMounted ? new Date(entity.updatedAt).toLocaleDateString() : '...'}
                   </span>
                 </div>
-                {/* TODO: Replace with real dynamic summary once narrative engine is ready */}
                 <p className="text-sm text-slate-400 line-clamp-2 leading-relaxed">
                   Updated {entity.type.toLowerCase()} details and expanded lore connections. Adjusted political standing and historical context...
                 </p>
@@ -85,7 +83,6 @@ export default function RecentChronicles() {
                   >
                     {entity.type.charAt(0) + entity.type.slice(1).toLowerCase()}
                   </span>
-                  {/* TODO: Implement dynamic sub-tags (e.g. 'Major NPC') based on entity metadata */}
                   <span className="px-2 py-0.5 rounded-full text-micro-badge border bg-blue-500/10 text-blue-400 border-blue-500/20">
                     Major NPC
                   </span>

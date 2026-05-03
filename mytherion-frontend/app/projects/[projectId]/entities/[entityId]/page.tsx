@@ -31,7 +31,7 @@ export default function EntityDetailPage() {
   }, []);
 
   useEffect(() => {
-    dispatch(fetchEntity(entityId));
+    dispatch(fetchEntity({ projectId, id: entityId }));
     if (!currentProject || currentProject.id !== projectId) {
       dispatch(fetchProject(projectId));
     }
@@ -48,7 +48,7 @@ export default function EntityDetailPage() {
   };
 
   const handleDelete = async () => {
-    await dispatch(deleteEntity(entityId));
+    await dispatch(deleteEntity({ projectId, id: entityId }));
     router.push(`/projects/${projectId}/entities`);
   };
 
@@ -66,22 +66,11 @@ export default function EntityDetailPage() {
     return { components: [] };
   };
 
-  const projectNavItems = [
-    { id: "overview", label: "Overview", href: `/projects/${projectId}` },
-    { id: "entities", label: "Entities", href: `/projects/${projectId}/entities` },
-    { id: "timeline", label: "Timeline", href: "#" },
-    { id: "maps", label: "Maps", href: "#" },
-  ];
-
-  const managementItems = [
-    { id: "settings", label: "Settings", href: "#" },
-    { id: "export", label: "Export Codex", href: "#" },
-  ];
 
   if (loading || !currentEntity || !currentProject) {
     return (
       <div className="relative z-10 flex h-screen overflow-hidden">
-        <DualSidebar activeSection="entities" activeIcon="projects" />
+        <DualSidebar activeSection="entities" projectId={projectId} />
         <main className="flex-1 flex flex-col overflow-hidden">
           <DashboardHeader />
           <div className="flex-1 flex items-center justify-center">
@@ -95,7 +84,7 @@ export default function EntityDetailPage() {
   if (error) {
     return (
       <div className="relative z-10 flex h-screen overflow-hidden">
-        <DualSidebar activeSection="entities" activeIcon="projects" />
+        <DualSidebar activeSection="entities" projectId={projectId} />
         <main className="flex-1 flex flex-col overflow-hidden">
           <DashboardHeader />
           <div className="flex-1 flex items-center justify-center">
@@ -115,10 +104,7 @@ export default function EntityDetailPage() {
     <div className="relative z-10 flex h-screen overflow-hidden">
       <DualSidebar 
         activeSection="entities"
-        activeIcon="projects"
-        navItems={projectNavItems}
-        managementItems={managementItems}
-        subTitle={`PROJECT: ${currentProject.name.toUpperCase()}`}
+        projectId={projectId}
       />
 
       <main className="flex-1 flex flex-col overflow-hidden">

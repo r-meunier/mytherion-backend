@@ -3,12 +3,17 @@
 import { useState } from "react";
 import { useAppSelector, useAppDispatch } from "../store/hooks";
 import { logoutUser } from "../store/authSlice";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 
-export default function DashboardHeader() {
+interface DashboardHeaderProps {
+  onCreateProject?: () => void;
+}
+
+export default function DashboardHeader({ onCreateProject }: DashboardHeaderProps) {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const pathname = usePathname();
   const { isAuthenticated, user, isInitialized } = useAppSelector((state) => state.auth);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -17,115 +22,106 @@ export default function DashboardHeader() {
     router.push("/login");
   };
 
+  const navItems = [
+    { label: "Dashboard", href: "/", active: pathname === "/" },
+    { label: "Community", href: "#", active: false },
+    { label: "Assets", href: "#", active: false },
+  ];
+
   return (
-    <header className="h-20 flex items-center justify-between px-8 border-b border-white/10 bg-white/5 backdrop-blur-md relative z-50">
-      {/* Search Bar */}
-      <div className="flex items-center space-x-4">
+    <header className="h-16 flex items-center justify-between px-8 border-b border-white/5 bg-[#16111B]/80 backdrop-blur-xl relative z-50">
+      {/* Navigation Tabs (From Design) */}
+      <div className="flex items-center gap-12 h-full">
+        <nav className="flex items-center gap-8 h-full">
+          {navItems.map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
+              className={`text-sm font-bold h-full flex items-center transition-all duration-300 relative top-[1px] ${
+                item.active 
+                  ? "text-primary border-b-2 border-primary" 
+                  : "text-white/50 hover:text-white"
+              }`}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Search Bar (Exact Design Specs) */}
         <div className="relative">
-          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" style={{ fontSize: '20px' }}>
+          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/30 text-[18px]">
             search
           </span>
           <input
-            className="pl-10 pr-4 py-2 bg-white/5 border-none focus:ring-1 focus:ring-primary rounded-full text-sm w-80 text-slate-200 placeholder:text-slate-500"
-            placeholder="Search the multiverse..."
+            className="pl-10 pr-4 py-1.5 bg-white/5 border-none focus:ring-1 focus:ring-primary/40 rounded-full text-sm w-72 text-white placeholder:text-white/20 transition-all"
+            placeholder="Search archives..."
             type="text"
           />
         </div>
       </div>
 
-      {/* Right Side - Conditional based on auth state */}
-      <div className="flex items-center space-x-6">
+      {/* Right Side Actions */}
+      <div className="flex items-center gap-4">
         {!isInitialized ? (
-          /* Loading Skeleton - Matches dimensions of content to prevent shift */
-          <div className="h-11 w-24 bg-white/5 rounded-lg animate-pulse"></div>
+          <div className="h-10 w-24 bg-white/5 rounded-lg animate-pulse"></div>
         ) : isAuthenticated && user ? (
           <>
-            {/* Notification Button */}
-            <button className="relative p-2 text-slate-400 hover:text-primary transition-colors">
-              <span className="material-symbols-outlined">notifications</span>
-              <span className="absolute top-2 right-2 w-2 h-2 bg-secondary rounded-full border-2 border-background-dark"></span>
+            {/* Notifications */}
+            <button className="w-10 h-10 rounded-full flex items-center justify-center text-white/50 hover:text-white hover:bg-white/5 transition-colors">
+              <span className="material-symbols-outlined text-[22px]">notifications</span>
             </button>
 
-            {/* User Profile */}
+            {/* Profile Dropdown */}
             <div 
               className="relative"
               onMouseEnter={() => setIsDropdownOpen(true)}
               onMouseLeave={() => setIsDropdownOpen(false)}
             >
-              <div className="flex items-center space-x-3 pl-6 border-l border-white/10 cursor-pointer py-2">
-                <div className="text-right">
-                  <p className="text-sm font-semibold text-white">
-                    {user.username || user.email}
-                  </p>
-                  <div className="flex items-center justify-end gap-2 mt-0.5">
-                    <p className="text-top-nav-header !text-primary">
-                      {user.emailVerified ? "Verified User" : "Unverified"}
-                    </p>
-                    {user.role === 'ADMIN' && (
-                      <span className="px-2 py-0.5 rounded-sm bg-amber-500/20 text-amber-500 text-micro-badge !tracking-tighter border border-amber-500/30">
-                        Arbiter
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div className="w-10 h-10 rounded-full ring-2 ring-primary/30 p-0.5 overflow-hidden transition-transform group-hover:scale-105">
-                  <div className="w-full h-full rounded-full bg-linear-to-br from-primary to-purple-600 flex items-center justify-center">
-                    <span className="material-symbols-outlined text-white text-[20px]">person</span>
-                  </div>
-                </div>
-                <span className={`material-symbols-outlined text-slate-500 text-[18px] transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`}>
-                  keyboard_arrow_down
-                </span>
-              </div>
+              <button className="w-10 h-10 rounded-full flex items-center justify-center text-white/50 hover:text-white hover:bg-white/5 transition-colors">
+                <span className="material-symbols-outlined text-[24px]">account_circle</span>
+              </button>
 
-              {/* Dropdown Menu */}
-              <div className={`absolute right-0 top-full mt-1 w-48 bg-[#0f0f23] backdrop-blur-2xl border border-white/10 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden transition-all duration-300 origin-top-right z-50 ${
+              <div className={`absolute right-0 top-full mt-2 w-56 bg-[#0f0f23] backdrop-blur-3xl border border-white/10 rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden transition-all duration-300 origin-top-right z-50 ${
                 isDropdownOpen ? 'opacity-100 scale-100 translate-y-0 visible' : 'opacity-0 scale-95 -translate-y-2 invisible'
               }`}>
-                <div className="p-2 space-y-1">
+                <div className="p-3 space-y-1">
+                  <div className="px-3 py-2 border-b border-white/5 mb-1">
+                    <p className="text-xs font-bold text-white truncate">{user.username || user.email}</p>
+                    <p className="text-[10px] text-primary uppercase tracking-[0.2em] mt-0.5">Arbiter Level 4</p>
+                  </div>
                   <Link 
-                    href="/settings"
-                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors group"
+                    href="#"
+                    className="flex items-center gap-3 px-3 py-2 text-sm text-white/60 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
                   >
-                    <span className="material-symbols-outlined text-[18px] text-slate-500 group-hover:text-primary transition-colors">
-                      settings
-                    </span>
+                    <span className="material-symbols-outlined text-[18px]">settings</span>
                     Settings
                   </Link>
-                  
-                  {user.role === 'ADMIN' && (
-                    <Link 
-                      href="/admin"
-                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors group"
-                    >
-                      <span className="material-symbols-outlined text-[18px] text-slate-500 group-hover:text-amber-500 transition-colors">
-                        shield_person
-                      </span>
-                      Admin Portal
-                    </Link>
-                  )}
-
-                  <div className="h-px bg-white/5 my-1 mx-2" />
-
                   <button 
                     onClick={handleLogout}
-                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-rose-400/80 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-all group"
+                    className="w-full flex items-center gap-3 px-3 py-2 text-sm text-rose-400/80 hover:text-white hover:bg-rose-500/10 rounded-lg transition-all"
                   >
-                    <span className="material-symbols-outlined text-[18px] group-hover:translate-x-0.5 transition-transform">
-                      logout
-                    </span>
+                    <span className="material-symbols-outlined text-[18px]">logout</span>
                     Log out
                   </button>
                 </div>
               </div>
             </div>
+
+            {/* New Project Action (From Design) */}
+            {onCreateProject && (
+              <button 
+                onClick={onCreateProject}
+                className="bg-primary/20 text-primary border border-primary/20 px-5 py-1.5 rounded-lg text-sm font-bold hover:bg-primary/30 transition-all active:scale-[0.98] shadow-lg shadow-primary/10"
+              >
+                New Project
+              </button>
+            )}
           </>
         ) : (
-          /* Login Button for unauthenticated users */
           <Link href="/login">
-            <button className="bg-primary hover:bg-primary/80 text-white px-5 py-2.5 rounded-lg flex items-center space-x-2 transition-all shadow-lg shadow-primary/20">
-              <span className="material-symbols-outlined text-[20px]">login</span>
-              <span className="font-semibold">Login</span>
+            <button className="bg-primary hover:bg-primary/80 text-white px-5 py-1.5 rounded-lg text-sm font-bold transition-all shadow-lg shadow-primary/20">
+              Login
             </button>
           </Link>
         )}
@@ -133,4 +129,3 @@ export default function DashboardHeader() {
     </header>
   );
 }
-

@@ -30,7 +30,7 @@ export default function EntityModal({ isOpen, onClose, projectId, entity }: Enti
   const handleSubmit = async (data: CreateEntityRequest | UpdateEntityRequest) => {
     let result;
     if (entity) {
-      result = await dispatch(updateEntity({ id: entity.id, data: data as UpdateEntityRequest }));
+      result = await dispatch(updateEntity({ projectId, id: entity.id, data: data as UpdateEntityRequest }));
     } else {
       result = await dispatch(createEntity({ projectId, data: data as CreateEntityRequest }));
     }

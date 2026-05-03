@@ -13,6 +13,7 @@ import {
   faSearch,
   faEllipsisVertical
 } from "@fortawesome/free-solid-svg-icons";
+import { useIsMounted } from "../../hooks/useIsMounted";
 
 export default function UserManagementPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -61,6 +62,8 @@ export default function UserManagementPage() {
       alert(err.message || "Failed to delete user");
     }
   };
+
+  const isMounted = useIsMounted();
 
   const filteredUsers = users.filter(user => 
     user.username.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -158,7 +161,7 @@ export default function UserManagementPage() {
                     </td>
                     <td className="px-6 py-5">
                       <span className="text-xs text-slate-400">
-                        {new Date().toLocaleDateString()} {/* Replace with real createdAt later */}
+                        {isMounted ? new Date().toLocaleDateString() : '...'} {/* Replace with real createdAt later */}
                       </span>
                     </td>
                     <td className="px-6 py-5 text-right">

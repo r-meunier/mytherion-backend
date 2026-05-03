@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks';
-import { fetchProject, fetchProjectStats, clearCurrentProject } from '@/app/store/projectSlice';
+import { fetchProject, clearCurrentProject } from '@/app/store/projectSlice';
+import { fetchProjectDashboardStats } from '@/app/store/dashboardSlice';
 import Link from 'next/link';
 import StatCard from '@/app/components/ui/StatCard';
 import ModuleCard from '@/app/components/ui/ModuleCard';
@@ -14,13 +15,14 @@ import { getProjectNavItems, getManagementItems } from '@/app/config/projectNavi
 export default function ProjectDashboard() {
   const params = useParams();
   const dispatch = useAppDispatch();
-  const { currentProject, stats, loading, error } = useAppSelector((state) => state.projects);
+  const { currentProject, loading: projectLoading, error: projectError } = useAppSelector((state) => state.projects);
+  const { stats, loading: statsLoading, error: statsError } = useAppSelector((state) => state.dashboard);
   const projectId = Number(params.projectId);
 
   useEffect(() => {
     if (projectId) {
       dispatch(fetchProject(projectId));
-      dispatch(fetchProjectStats(projectId));
+      dispatch(fetchProjectDashboardStats(projectId));
     }
 
     return () => {
@@ -31,7 +33,7 @@ export default function ProjectDashboard() {
   const projectNavItems = getProjectNavItems(projectId);
   const managementItems = getManagementItems();
 
-  if (loading && !currentProject) {
+  if ((projectLoading || statsLoading) && !currentProject) {
     return (
       <div className="min-h-screen bg-background-dark flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
@@ -39,13 +41,13 @@ export default function ProjectDashboard() {
     );
   }
 
-  if (error || !currentProject) {
+  if (projectError || statsError || !currentProject) {
     return (
       <div className="flex h-screen items-center justify-center bg-background-dark">
         <div className="text-center">
-          <p className="text-red-400 mb-4">{error || 'Project not found'}</p>
+          <p className="text-red-400 mb-4">{projectError || statsError || 'Project not found'}</p>
           <Link
-            href="/projects"
+            href="/"
             className="text-primary hover:text-primary/80 transition-colors"
           >
              Back to Projects
@@ -60,10 +62,8 @@ export default function ProjectDashboard() {
       {/* Dual Sidebar with Project Context */}
       <DualSidebar 
         activeSection="overview" 
-        activeIcon="projects"
-        navItems={projectNavItems}
-        managementItems={managementItems}
-        subTitle={`PROJECT: ${currentProject.name.toUpperCase()}`}
+        activeIcon="overview"
+        projectId={projectId}
       />
 
       {/* Main Content Area */}
@@ -76,7 +76,7 @@ export default function ProjectDashboard() {
           
           {/* Page Title & Back Link */}
           <div>
-              <Link href="/projects" className="inline-flex items-center text-primary text-sm font-semibold hover:text-primary/80 transition-colors mb-4 group">
+              <Link href="/" className="inline-flex items-center text-primary text-sm font-semibold hover:text-primary/80 transition-colors mb-4 group">
                  <span className="material-symbols-outlined text-sm mr-2 group-hover:-translate-x-1 transition-transform">arrow_back</span>
                  Back to Worlds
               </Link>
@@ -91,22 +91,23 @@ export default function ProjectDashboard() {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <StatCard
                       title="Total Entities"
-                      value={stats?.entityCount || 0}
+                      value={stats?.totalEntities || 0}
                       icon="auto_stories"
-                      loading={loading}
+                      loading={statsLoading}
+                      subtitle={stats && stats.entitiesThisWeek > 0 ? `+${stats.entitiesThisWeek} this week` : undefined}
                     />
                     <StatCard
                       title="Characters"
-                      value={stats?.entityCountByType?.['Character'] || 0}
+                      value={stats?.entityCountByType?.['CHARACTER'] || 0}
                       icon="person"
-                      loading={loading}
+                      loading={statsLoading}
                       subtitleColor="text-blue-400"
                     />
                     <StatCard
                       title="Locations"
-                      value={stats?.entityCountByType?.['Location'] || 0}
+                      value={stats?.entityCountByType?.['LOCATION'] || 0}
                       icon="location_on"
-                      loading={loading}
+                      loading={statsLoading}
                       subtitleColor="text-green-400"
                     />
                   </div>

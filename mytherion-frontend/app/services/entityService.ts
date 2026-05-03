@@ -55,17 +55,17 @@ export const entityService = {
   },
 
   // Get single entity
-  getEntity: async (id: number): Promise<Entity> => {
-    serviceLogger.debug('Fetching entity', { entityId: id });
+  getEntity: async (projectId: number, id: number): Promise<Entity> => {
+    serviceLogger.debug('Fetching entity', { projectId, entityId: id });
 
     try {
-      const response = await axios.get(`${API_URL}/api/entities/${id}`, {
+      const response = await axios.get(`${API_URL}/api/projects/${projectId}/entities/${id}`, {
         withCredentials: true,
       });
-      serviceLogger.info('Entity fetched successfully', { entityId: id, name: response.data.name });
+      serviceLogger.info('Entity fetched successfully', { projectId, entityId: id, name: response.data.name });
       return response.data;
     } catch (error) {
-      serviceLogger.error('Failed to fetch entity', error, { entityId: id });
+      serviceLogger.error('Failed to fetch entity', error, { projectId, entityId: id });
       throw error;
     }
   },
@@ -91,32 +91,32 @@ export const entityService = {
   },
 
   // Update entity
-  updateEntity: async (id: number, data: UpdateEntityRequest): Promise<Entity> => {
-    serviceLogger.info('Updating entity', { entityId: id, updates: Object.keys(data) });
+  updateEntity: async (projectId: number, id: number, data: UpdateEntityRequest): Promise<Entity> => {
+    serviceLogger.info('Updating entity', { projectId, entityId: id, updates: Object.keys(data) });
 
     try {
-      const response = await axios.patch(`${API_URL}/api/entities/${id}`, data, {
+      const response = await axios.patch(`${API_URL}/api/projects/${projectId}/entities/${id}`, data, {
         withCredentials: true,
       });
-      serviceLogger.info('Entity updated successfully', { entityId: id });
+      serviceLogger.info('Entity updated successfully', { projectId, entityId: id });
       return response.data;
     } catch (error) {
-      serviceLogger.error('Failed to update entity', error, { entityId: id, data });
+      serviceLogger.error('Failed to update entity', error, { projectId, entityId: id, data });
       throw error;
     }
   },
 
   // Delete entity
-  deleteEntity: async (id: number): Promise<void> => {
-    serviceLogger.info('Deleting entity', { entityId: id });
+  deleteEntity: async (projectId: number, id: number): Promise<void> => {
+    serviceLogger.info('Deleting entity', { projectId, entityId: id });
 
     try {
-      await axios.delete(`${API_URL}/api/entities/${id}`, {
+      await axios.delete(`${API_URL}/api/projects/${projectId}/entities/${id}`, {
         withCredentials: true,
       });
-      serviceLogger.info('Entity deleted successfully', { entityId: id });
+      serviceLogger.info('Entity deleted successfully', { projectId, entityId: id });
     } catch (error) {
-      serviceLogger.error('Failed to delete entity', error, { entityId: id });
+      serviceLogger.error('Failed to delete entity', error, { projectId, entityId: id });
       throw error;
     }
   },

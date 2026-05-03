@@ -20,29 +20,29 @@ export default function StatCard({
   title,
   value,
   subtitle,
-  subtitleColor = "text-emerald-400",
+  subtitleColor = "text-primary",
   icon,
   badges,
   loading,
   progressBar,
 }: StatCardProps) {
   return (
-    <div className="glass p-6 rounded-2xl relative overflow-hidden group hover:border-primary/50! transition-all cursor-pointer">
+    <div className="glass-card p-8 rounded-2xl relative overflow-hidden group hover:border-primary/50 transition-all duration-500 cursor-pointer bg-[#16111b]/40 backdrop-blur-xl border border-white/5 shadow-2xl min-h-[160px] flex flex-col justify-center">
       {/* Background Icon Watermark */}
-      <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
-        <span className="material-symbols-outlined" style={{ fontSize: '100px' }}>{icon}</span>
+      <div className="absolute -right-6 -bottom-6 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity duration-700 pointer-events-none">
+        <span className="material-symbols-outlined" style={{ fontSize: '140px' }}>{icon}</span>
       </div>
 
       {/* Content */}
-      <p className="text-card-title relative z-10">{title}</p>
-      <div className="flex items-baseline space-x-2 mt-2 relative z-10">
+      <p className="text-subtitle-label text-white/40 tracking-[0.2em] relative z-10 mb-2">{title}</p>
+      <div className="flex items-baseline space-x-3 relative z-10">
         {loading ? (
-          <div className="h-10 w-24 bg-white/10 rounded animate-pulse" />
+          <div className="h-10 w-32 bg-white/5 rounded animate-pulse" />
         ) : (
-          <h3 className="text-4xl font-display font-bold text-white">{value}</h3>
+          <h3 className="text-5xl font-display font-extrabold text-white tracking-tight drop-shadow-sm">{value}</h3>
         )}
         {!loading && subtitle && (
-          <span className={`${subtitleColor} text-xs font-bold`}>{subtitle}</span>
+          <span className={`${subtitleColor} text-xs font-bold uppercase tracking-wider opacity-80`}>{subtitle}</span>
         )}
       </div>
 
@@ -51,14 +51,14 @@ export default function StatCard({
 
       {/* Optional Progress Bar */}
       {progressBar && !loading && (
-        <div className="mt-4 flex items-center space-x-2 relative z-10">
-          <div className="h-1.5 flex-1 bg-white/10 rounded-full overflow-hidden">
+        <div className="mt-6 flex items-center space-x-3 relative z-10">
+          <div className="h-1 flex-1 bg-white/5 rounded-full overflow-hidden">
             <div
-              className="h-full bg-secondary shadow-[0_0_8px_rgba(251,191,36,0.5)]"
+              className="h-full bg-gradient-to-r from-primary to-purple-500 shadow-[0_0_10px_rgba(168,85,247,0.4)]"
               style={{ width: `${progressBar.value}%` }}
             ></div>
           </div>
-          <span className="text-micro-badge text-secondary">
+          <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">
             {progressBar.label}
           </span>
         </div>

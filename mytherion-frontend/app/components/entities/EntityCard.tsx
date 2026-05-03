@@ -3,6 +3,7 @@
 import { Entity } from '@/app/types/entity';
 import { entityTypeConfig } from './EntityTypeSelector';
 import { useRouter } from 'next/navigation';
+import { useIsMounted } from '@/app/hooks/useIsMounted';
 
 interface EntityCardProps {
   entity: Entity;
@@ -12,6 +13,7 @@ interface EntityCardProps {
 
 export default function EntityCard({ entity, onEdit, onDelete }: EntityCardProps) {
   const router = useRouter();
+  const isMounted = useIsMounted();
   const typeConfig = entityTypeConfig[entity.type];
 
   const handleCardClick = () => {
@@ -102,9 +104,8 @@ export default function EntityCard({ entity, onEdit, onDelete }: EntityCardProps
 
       {/* Footer */}
       <div className="text-xs text-slate-500 mt-4 pt-4 border-t border-white/10">
-        Created {new Date(entity.createdAt).toLocaleDateString()}
+        Created {isMounted ? new Date(entity.createdAt).toLocaleDateString() : '...'}
       </div>
     </div>
   );
 }
-

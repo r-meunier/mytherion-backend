@@ -25,16 +25,16 @@ export default function EditEntityPage() {
     }
 
     if (!currentEntity || currentEntity.id !== entityId) {
-      dispatch(fetchEntity(entityId));
+      dispatch(fetchEntity({ projectId, id: entityId }));
     }
 
     return () => {
       dispatch(clearCurrentEntity());
     };
-  }, [dispatch, entityId, currentEntity, user, router]);
+  }, [dispatch, entityId, projectId, currentEntity, user, router]);
 
   const handleSubmit = async (data: UpdateEntityRequest) => {
-    const result = await dispatch(updateEntity({ id: entityId, data }));
+    const result = await dispatch(updateEntity({ projectId, id: entityId, data }));
     if (updateEntity.fulfilled.match(result)) {
       router.push(`/projects/${projectId}/entities/${entityId}`);
     }

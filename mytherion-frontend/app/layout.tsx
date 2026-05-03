@@ -54,7 +54,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <head>
         {/* Preconnect to Google Fonts for faster loading */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -76,6 +76,7 @@ export default function RootLayout({
       </head>
       <body
         className={`${inter.variable} ${outfit.variable} ${cinzel.variable} ${greatVibes.variable} ${dancingScript.variable} antialiased bg-background-dark text-slate-100 selection:bg-primary/30`}
+        suppressHydrationWarning
       >
         {/* Animated background overlay */}
         <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">

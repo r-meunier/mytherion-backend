@@ -61,8 +61,8 @@ export const fetchEntities = createAsyncThunk(
 
 export const fetchEntity = createAsyncThunk(
   'entities/fetchEntity',
-  async (id: number) => {
-    const response = await entityService.getEntity(id);
+  async ({ projectId, id }: { projectId: number; id: number }) => {
+    const response = await entityService.getEntity(projectId, id);
     return response;
   }
 );
@@ -77,16 +77,16 @@ export const createEntity = createAsyncThunk(
 
 export const updateEntity = createAsyncThunk(
   'entities/updateEntity',
-  async ({ id, data }: { id: number; data: UpdateEntityRequest }) => {
-    const response = await entityService.updateEntity(id, data);
+  async ({ projectId, id, data }: { projectId: number; id: number; data: UpdateEntityRequest }) => {
+    const response = await entityService.updateEntity(projectId, id, data);
     return response;
   }
 );
 
 export const deleteEntity = createAsyncThunk(
   'entities/deleteEntity',
-  async (id: number) => {
-    await entityService.deleteEntity(id);
+  async ({ projectId, id }: { projectId: number; id: number }) => {
+    await entityService.deleteEntity(projectId, id);
     return id;
   }
 );
