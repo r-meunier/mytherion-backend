@@ -13,6 +13,7 @@ export interface Project {
   createdAt: string;
   updatedAt: string;
   genre?: string;
+  entityCount?: number;
 }
 
 export interface ProjectStats {

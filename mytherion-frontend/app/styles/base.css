@@ -275,3 +275,14 @@ body {
 .btn-glass-danger:hover .material-symbols-outlined {
   color: #f87171;
 }
+
+/* Project Card Global Signature */
+:root {
+  --project-card-h: 440px;
+  --project-card-r: 16px;
+}
+
+@utility project-card-base {
+  height: var(--project-card-h);
+  border-radius: var(--project-card-r);
+}

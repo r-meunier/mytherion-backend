@@ -13,10 +13,11 @@ data class ProjectResponse(
     val ownerUsername: String,
     val createdAt: Instant,
     val updatedAt: Instant,
-    val genre: String?
+    val genre: String?,
+    val entityCount: Long = 0
 ) {
     companion object {
-        fun from(project: Project) =
+        fun from(project: Project, entityCount: Long = 0) =
             ProjectResponse(
                 id = project.id!!,
                 name = project.name,
@@ -25,7 +26,8 @@ data class ProjectResponse(
                 ownerUsername = project.owner.username,
                 createdAt = project.createdAt,
                 updatedAt = project.updatedAt,
-                genre = project.genre
+                genre = project.genre,
+                entityCount = entityCount
             )
     }
 }

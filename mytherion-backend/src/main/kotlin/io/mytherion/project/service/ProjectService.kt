@@ -70,7 +70,10 @@ class ProjectService(
         return logger.measureTime("Fetch projects") {
             val pageable: Pageable =
                 PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"))
-            val result = projectRepository.findAllByOwner(user, pageable).map(ProjectResponse::from)
+            val result = projectRepository.findAllByOwner(user, pageable).map { project ->
+                val count = entityQueryService.countByProject(project)
+                ProjectResponse.from(project, count)
+            }
 
             logger.infoWith(
                 "Projects listed",
@@ -94,8 +97,9 @@ class ProjectService(
             }
         verifyOwnership(project, user)
 
-        logger.infoWith("Project fetched", "projectId" to id, "name" to project.name)
-        return ProjectResponse.from(project)
+        val count = entityQueryService.countByProject(project)
+        logger.infoWith("Project fetched", "projectId" to id, "name" to project.name, "entityCount" to count)
+        return ProjectResponse.from(project, count)
     }
 
     @Transactional
@@ -124,7 +128,7 @@ class ProjectService(
                     "name" to saved.name
                 )
                 success = true
-                ProjectResponse.from(saved)
+                ProjectResponse.from(saved, 0)
             }
         } finally {
             val duration = System.currentTimeMillis() - startTime
@@ -156,9 +160,10 @@ class ProjectService(
         request.genre?.let { project.genre = it }
 
         val saved = projectRepository.save(project)
+        val count = entityQueryService.countByProject(saved)
         logger.infoWith("Project updated successfully", "projectId" to id)
 
-        return ProjectResponse.from(saved)
+        return ProjectResponse.from(saved, count)
     }
 
     @Transactional(readOnly = true)

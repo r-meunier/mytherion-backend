@@ -1,6 +1,81 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+
+interface Option {
+  value: string;
+  label: string;
+}
+
+interface GlassSelectProps {
+  label: string;
+  value: string;
+  options: Option[];
+  onChange: (value: string) => void;
+  minWidth?: string;
+}
+
+function GlassSelect({ label, value, options, onChange, minWidth = "140px" }: GlassSelectProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const selectedOption = options.find(opt => opt.value === value);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div className="flex flex-col gap-1.5" ref={containerRef}>
+      <label className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] px-1">
+        {label}:
+      </label>
+      <div className="relative" style={{ minWidth }}>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className={`w-full flex items-center justify-between bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-sm text-white transition-all hover:bg-white/10 hover:border-white/20 focus:outline-none focus:ring-1 focus:ring-primary/40 ${isOpen ? 'ring-1 ring-primary/40' : ''}`}
+        >
+          <span className="truncate">{selectedOption?.label}</span>
+          <span className={`material-symbols-outlined text-[20px] text-white/20 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
+            expand_more
+          </span>
+        </button>
+
+        {isOpen && (
+          <div className="absolute top-[calc(100%+8px)] left-0 w-full z-50 bg-[#16111B]/95 backdrop-blur-2xl border border-white/10 rounded-xl shadow-[0_12px_40px_rgba(0,0,0,0.8)] overflow-hidden animate-in fade-in zoom-in-95 duration-200 origin-top">
+            <div className="py-1">
+              {options.map((option) => (
+                <button
+                  key={option.value}
+                  onClick={() => {
+                    onChange(option.value);
+                    setIsOpen(false);
+                  }}
+                  className={`w-full text-left px-4 py-2.5 text-sm transition-colors flex items-center justify-between group ${
+                    option.value === value 
+                      ? 'bg-primary/10 text-primary font-semibold' 
+                      : 'text-white/60 hover:bg-white/5 hover:text-white'
+                  }`}
+                >
+                  {option.label}
+                  {option.value === value && (
+                    <span className="material-symbols-outlined text-[16px]">check</span>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 interface ProjectFiltersProps {
   onSearchChange?: (query: string) => void;
@@ -16,16 +91,31 @@ export default function ProjectFilters({
   onViewChange
 }: ProjectFiltersProps) {
   const [view, setView] = useState<"grid" | "list">("grid");
+  const [sortBy, setSortBy] = useState("date");
+  const [groupBy, setGroupBy] = useState("none");
 
   const handleViewToggle = (newView: "grid" | "list") => {
     setView(newView);
     onViewChange?.(newView);
   };
 
+  const sortOptions = [
+    { value: "name", label: "Name" },
+    { value: "series", label: "Series" },
+    { value: "date", label: "Date" }
+  ];
+
+  const groupOptions = [
+    { value: "none", label: "None" },
+    { value: "series", label: "Series" },
+    { value: "date", label: "Date" },
+    { value: "shared", label: "Shared" }
+  ];
+
   return (
-    <div className="flex flex-wrap items-center gap-4">
+    <div className="flex flex-wrap items-center gap-6">
       {/* Search / Filter */}
-      <div className="flex flex-col gap-1.5 min-w-[240px]">
+      <div className="flex flex-col gap-1.5 min-w-[260px]">
         <label className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] px-1">
           Search/Filter:
         </label>
@@ -45,44 +135,26 @@ export default function ProjectFilters({
       </div>
 
       {/* Sort By */}
-      <div className="flex flex-col gap-1.5">
-        <label className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] px-1">
-          Sort By:
-        </label>
-        <div className="relative">
-          <select 
-            className="appearance-none bg-white/5 border border-white/10 rounded-lg pl-4 pr-10 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-primary/40 transition-all cursor-pointer min-w-[120px]"
-            onChange={(e) => onSortChange?.(e.target.value)}
-          >
-            <option value="date">Date</option>
-            <option value="name">Name</option>
-            <option value="recent">Recent</option>
-          </select>
-          <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-white/20 pointer-events-none text-[20px]">
-            expand_more
-          </span>
-        </div>
-      </div>
+      <GlassSelect
+        label="Sort By"
+        value={sortBy}
+        options={sortOptions}
+        onChange={(val) => {
+          setSortBy(val);
+          onSortChange?.(val);
+        }}
+      />
 
       {/* Group By */}
-      <div className="flex flex-col gap-1.5">
-        <label className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] px-1">
-          Group By:
-        </label>
-        <div className="relative">
-          <select 
-            className="appearance-none bg-white/5 border border-white/10 rounded-lg pl-4 pr-10 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-primary/40 transition-all cursor-pointer min-w-[120px]"
-            onChange={(e) => onGroupChange?.(e.target.value)}
-          >
-            <option value="series">Series</option>
-            <option value="type">Type</option>
-            <option value="none">None</option>
-          </select>
-          <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-white/20 pointer-events-none text-[20px]">
-            expand_more
-          </span>
-        </div>
-      </div>
+      <GlassSelect
+        label="Group By"
+        value={groupBy}
+        options={groupOptions}
+        onChange={(val) => {
+          setGroupBy(val);
+          onGroupChange?.(val);
+        }}
+      />
 
       {/* View As */}
       <div className="flex flex-col gap-1.5">

@@ -54,18 +54,16 @@ export default function Home() {
         {/* Dashboard Content - Matching Design p-stack-lg (48px) */}
         <div className="flex-1 overflow-y-auto p-[48px] space-y-[48px] scroll-smooth relative z-10 custom-scrollbar">
           
-          {/* Section Header & Filter Bar (Exact Match) */}
-          <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-12">
-            <div>
-              <h1 className="text-display-lg">
-                Your Worlds
-              </h1>
-              <p className="text-subtitle-muted mt-1 max-w-md">
-                Access and manage your multi-verse projects.
-              </p>
-            </div>
-            
-            {/* Filter Bar (New Logical UX) */}
+          {/* 1. Header Section */}
+          <div className="mb-10">
+            <h1 className="text-display-lg text-white">Your Worlds</h1>
+            <p className="text-subtitle-muted mt-1 max-w-md">
+              Access and manage your multi-verse projects.
+            </p>
+          </div>
+          
+          {/* 2. Controls Section (Filters & Views) */}
+          <div className="flex justify-end items-end gap-6 mb-12">
             <ProjectFilters 
               onSearchChange={(q) => console.log("Search:", q)}
               onSortChange={(s) => console.log("Sort:", s)}

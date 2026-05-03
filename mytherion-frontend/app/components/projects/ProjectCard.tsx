@@ -37,34 +37,38 @@ export default function ProjectCard({ project, onEdit, onDelete }: ProjectCardPr
     return images[id % images.length];
   };
 
+  const isPinned = project.id === 1; // Placeholder for pinned behavior
+
   return (
-    <div className="glass-card rounded-2xl overflow-hidden group cursor-pointer flex flex-col relative h-[420px] shadow-[0_8px_32px_0_rgba(0,0,0,0.4)] border border-white/5 bg-[#16111B]/40">
+    <div className="project-card-base glass-card overflow-hidden group cursor-pointer flex flex-col relative shadow-[0_8px_32px_0_rgba(0,0,0,0.5)] border border-white/5 bg-[#16111B]/40 hover:translate-y-[-4px] transition-all duration-500">
       {/* Click overlay */}
       <Link href={`/projects/${project.id}`} className="absolute inset-0 z-10" />
 
       {/* Hero Image Section */}
-      <div className="relative h-56 w-full overflow-hidden">
+      <div className="relative h-48 w-full overflow-hidden">
         <img 
           src={getPlaceholderImage(project.id)}
           alt={project.name}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#16111B] via-transparent to-transparent opacity-80" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#16111B] via-transparent to-transparent opacity-90" />
         
-        {/* Genre Badge */}
-        <div className="absolute top-4 right-4 z-20">
-          <span className="bg-black/60 backdrop-blur-md px-3 py-1 rounded-lg text-[10px] font-black text-secondary border border-secondary/20 flex items-center gap-1.5 uppercase tracking-widest">
-            <span className="material-symbols-outlined text-[12px]">star</span>
-            {project.genre || "Primary"}
-          </span>
-        </div>
+        {/* Pinned Tag */}
+        {isPinned && (
+          <div className="absolute top-4 right-4 z-20">
+            <span className="bg-[#fbbf24]/10 backdrop-blur-xl px-3 py-1 rounded-lg text-[8px] font-black text-secondary border border-secondary/30 flex items-center gap-1.5 uppercase tracking-[0.2em]">
+              <span className="material-symbols-outlined text-[14px]">stars</span>
+              Pinned
+            </span>
+          </div>
+        )}
       </div>
 
-      {/* Project Details Section (Matching Design Spatial Layout) */}
-      <div className="p-7 flex-1 flex flex-col bg-white/[0.02]">
+      {/* Project Details Section */}
+      <div className="p-7 flex-1 flex flex-col">
         {/* Title and Menu */}
-        <div className="flex justify-between items-start mb-2.5">
-          <h3 className="text-section-header font-bold text-[#E6E1E5] group-hover:text-primary transition-colors duration-300 truncate pr-4">
+        <div className="flex justify-between items-start mb-2">
+          <h3 className="text-xl font-semibold tracking-tight text-white group-hover:text-primary transition-colors duration-300 truncate pr-4">
             {project.name}
           </h3>
           <button className="text-white/20 hover:text-white transition-colors relative z-20">
@@ -73,31 +77,36 @@ export default function ProjectCard({ project, onEdit, onDelete }: ProjectCardPr
         </div>
 
         {/* Description */}
-        <p className="text-white/40 text-body-sm leading-relaxed line-clamp-2 mb-6 font-medium">
-          {project.description || "An infinite realm awaiting your narrative touch. Shape its destinies and record its histories."}
+        <p className="text-white/40 text-sm leading-relaxed line-clamp-3 mb-6 font-medium">
+          {project.description || "An infinite realm awaiting your narrative touch. Shape its destinies and record its histories. Shape its destinies and record its histories."}
         </p>
 
         {/* Metadata Footer */}
         <div className="mt-auto space-y-4">
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2 text-[11px] font-bold text-white/30 uppercase tracking-wider">
+          {/* Genre Badge (Moved from Image) */}
+          <div className="flex">
+            <span className="px-2.5 py-0.5 bg-primary/10 border border-primary/20 rounded-full text-[9px] font-black text-primary uppercase tracking-[0.2em]">
+              {project.genre || "Primary"}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-5">
+            <div className="flex items-center gap-1.5 text-[9px] font-black text-white/30 uppercase tracking-[0.2em]">
               <span className="material-symbols-outlined text-[16px] opacity-40">database</span>
-              <span>1,420 Entities</span>
+              <span>{(project.entityCount || 0).toLocaleString()} Entities</span>
             </div>
-            <div className="flex items-center gap-2 text-[11px] font-bold text-white/30 uppercase tracking-wider">
+            <div className="flex items-center gap-1.5 text-[9px] font-black text-white/30 uppercase tracking-[0.2em]">
               <span className="material-symbols-outlined text-[16px] opacity-40">schedule</span>
               <span>{formatDate(project.updatedAt)}</span>
             </div>
           </div>
           
-          {/* Progress Indication */}
-          <div className="relative pt-1">
-            <div className="overflow-hidden h-[3px] flex rounded-full bg-white/5">
-              <div 
-                style={{ width: `${(project.id * 15 % 70) + 25}%` }}
-                className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary/60"
-              />
-            </div>
+          {/* Progress Indication (Matching Design Shimmer) */}
+          <div className="relative h-[2px] w-full bg-white/5 rounded-full overflow-hidden">
+            <div 
+              style={{ width: `${(project.id * 15 % 70) + 25}%` }}
+              className="absolute inset-y-0 left-0 bg-primary/40 shadow-[0_0_8px_rgba(168,85,247,0.4)]"
+            />
           </div>
         </div>
       </div>
