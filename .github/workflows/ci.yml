@@ -1,0 +1,89 @@
+name: Mytherion CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  backend-test:
+    name: Backend Tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: mytherionuser
+          POSTGRES_PASSWORD: mytherionpassword
+          POSTGRES_DB: mytheriondb
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up JDK 24
+        uses: actions/setup-java@v4
+        with:
+          java-version: '24'
+          distribution: 'temurin'
+          cache: 'gradle'
+          
+      - name: Debug Gradle Wrapper
+        run: ls -l mytherion-backend/gradle/wrapper/gradle-wrapper.jar
+        
+      - name: Make Gradle executable
+        run: chmod +x ./mytherion-backend/gradlew
+
+      - name: Install Postgres Client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      - name: Wait for Postgres
+        run: |
+          until pg_isready -h localhost -p 5432 -U mytherionuser -d mytheriondb; do
+            echo "Waiting for Postgres..."
+            sleep 2
+          done
+          
+      - name: Run Backend Tests
+        working-directory: ./mytherion-backend
+        env:
+          SPRING_PROFILES_ACTIVE: test
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5432
+          POSTGRES_DB: mytheriondb
+          POSTGRES_USER: mytherionuser
+          POSTGRES_PASSWORD: mytherionpassword
+          MINIO_ENDPOINT: http://localhost:9000
+          MINIO_ACCESS_KEY: minioadmin
+          MINIO_SECRET_KEY: minioadmin
+          MINIO_BUCKET: mytherion-uploads
+          JWT_SECRET: "this-is-a-test-secret-that-is-at-least-32-characters-long"
+        run: ./gradlew test
+
+  frontend-test:
+    name: Frontend Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: './mytherion-frontend/package-lock.json'
+          
+      - name: Install dependencies
+        working-directory: ./mytherion-frontend
+        run: npm ci
+        
+      - name: Run Frontend Tests
+        working-directory: ./mytherion-frontend
+        run: npm test
