@@ -53,9 +53,11 @@ docker compose up -d
 ```
 
 #### 2. Start the Backend
+The backend uses **Spring Profiles** to manage environments.
 ```bash
 cd mytherion-backend
-./gradlew bootRun
+# For development (default):
+./gradlew bootRun --args='--spring.profiles.active=dev'
 ```
 
 #### 3. Start the Frontend
@@ -64,6 +66,11 @@ cd mytherion-frontend
 npm install
 npm run dev
 ```
+
+### 📱 Local Network Testing
+The project is configured for flexible testing across devices:
+*   **Automatic (Wi-Fi):** If you visit `http://YOUR_COMPUTER_IP:3001` from a phone on the same network, the app will automatically talk to the backend on port `8080` of that IP.
+*   **Manual Override:** If you need to expose the app via a tunnel (like Ngrok) or a public IP, set `NEXT_PUBLIC_API_URL` in `mytherion-frontend/.env.development`. If this is set to anything other than `localhost`, the automatic detection is disabled and your manual URL is used strictly.
 
 ---
 

@@ -6,6 +6,7 @@ import PsychologyFields from './PsychologyFields';
 import SocialFields from './SocialFields';
 import HistoryFields from './HistoryFields';
 import CustomFields from './CustomFields';
+import ItemFields from './ItemFields';
 import { EntityComponent, ComponentType } from '@/app/types/entity';
 
 interface ComponentDispatcherProps {
@@ -32,6 +33,9 @@ export default function ComponentDispatcher({ component, onChange, disabled = fa
     case ComponentType.HISTORY:
       return <HistoryFields data={component.data as any} onChange={onChange} disabled={disabled} />;
     
+    case ComponentType.ITEM:
+      return <ItemFields data={component.data as any} onChange={onChange} disabled={disabled} />;
+
     case ComponentType.CHARACTER_RELATIONS:
     case ComponentType.ORGANIZATION:
     case ComponentType.ORG_RELATIONS:

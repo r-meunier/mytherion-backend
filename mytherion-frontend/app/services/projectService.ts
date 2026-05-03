@@ -1,7 +1,6 @@
 import axios from 'axios';
 import logger from '../utils/logger';
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+import { API_URL } from './apiConfig';
 
 // Create a child logger for this service
 const serviceLogger = logger.child({ service: 'projectService' });
@@ -49,7 +48,7 @@ export interface Page<T> {
 }
 
 const api = axios.create({
-  baseURL: `${API_BASE_URL}/api`,
+  baseURL: `${API_URL}/api`,
   withCredentials: true, // Important for JWT cookies
   headers: {
     'Content-Type': 'application/json',

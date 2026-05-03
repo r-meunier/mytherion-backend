@@ -15,7 +15,11 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 
 @Configuration
 @EnableMethodSecurity
-class SecurityConfig(private val jwtAuthFilter: JwtAuthFilter) {
+class SecurityConfig(
+    private val jwtAuthFilter: JwtAuthFilter,
+    @org.springframework.beans.factory.annotation.Value("\${app.security.allowed-origins}")
+    private val allowedOrigins: List<String>
+) {
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
@@ -46,8 +50,8 @@ class SecurityConfig(private val jwtAuthFilter: JwtAuthFilter) {
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration()
 
-        // Allow frontend origin (localhost:3000 and 3001 for Next.js dev server)
-        configuration.allowedOrigins = listOf("http://localhost:3000", "http://localhost:3001")
+        // Allow frontend origins from configuration
+        configuration.allowedOrigins = allowedOrigins
 
         // Allow credentials (cookies)
         configuration.allowCredentials = true

@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { Entity, CreateEntityRequest, UpdateEntityRequest, EntityType } from '../types/entity';
 import logger from '../utils/logger';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+import { API_URL } from './apiConfig';
 
 // Create a child logger for this service
 const serviceLogger = logger.child({ service: 'entityService' });

@@ -153,12 +153,13 @@ docker compose up -d
 #### Option A: via Gradle
 
 ```bash
-./gradlew bootRun
+# Run with development profile (default for local dev)
+./gradlew bootRun --args='--spring.profiles.active=dev'
 ```
 
 #### Option B: via IntelliJ
 
-Run `MytherionApplication.kt`
+Run `MytherionApplication.kt`. Make sure to add `-Dspring.profiles.active=dev` to your VM options or active profiles in the run configuration.
 
 ---
 
@@ -531,6 +532,8 @@ This is the model that makes AI actually useful at scale. The same principles th
 | `MAIL_USERNAME`     | Email account username   | -                       |
 | `MAIL_PASSWORD`     | Email account password   | -                       |
 | `FRONTEND_URL`      | Frontend application URL | `http://localhost:3000` |
+| `ALLOWED_ORIGINS`  | Comma-separated CORS whitelist | `http://localhost:3000,http://localhost:3001` |
+| `SPRING_PROFILES_ACTIVE` | Active profile (dev/prod) | `dev` |
 
 ---
 

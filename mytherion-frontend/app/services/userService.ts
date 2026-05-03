@@ -1,7 +1,6 @@
 import { User } from "../types/auth";
 import { parseErrorMessage } from "../utils/errorMessages";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+import { API_URL } from "./apiConfig";
 
 export interface UserUpdateData {
   username?: string;

@@ -9,6 +9,7 @@ app:
     jwt:
       secret: "dev-secret-change-me-to-a-long-random-secret-at-least-32-chars"
       access-token-minutes: 60
+    allowed-origins: ${ALLOWED_ORIGINS:http://localhost:3000,http://localhost:3001,http://192.168.1.32:3000,http://192.168.1.32:3001}
 
 spring:
   mail:
