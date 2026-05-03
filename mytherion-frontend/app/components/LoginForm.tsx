@@ -75,10 +75,10 @@ export default function LoginForm() {
     <div className="w-full max-w-md">
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Email Field */}
-        <div className="space-y-1.5">
+        <div>
           <label
             htmlFor="email"
-            className="text-input-label ml-1"
+            className="block text-xs font-bold uppercase tracking-widest text-slate-500 ml-1 mb-1.5"
           >
             Email Address
           </label>
@@ -90,7 +90,7 @@ export default function LoginForm() {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className={`w-full bg-black/30 border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm text-white placeholder:text-slate-600 focus:ring-0 focus:outline-none input-glow transition-all ${
+                className={`w-full bg-black/30 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm text-white placeholder:text-slate-600 focus:ring-0 focus:outline-none input-glow transition-all ${
                 validationErrors.email ? 'border-red-500/50' : ''
                 }`}
                 placeholder="scribe@mytherion.com"
@@ -103,15 +103,13 @@ export default function LoginForm() {
         </div>
 
         {/* Password Field */}
-        <div className="space-y-1.5">
-            <div className="flex justify-between items-end mb-1">
-                <label
-                    htmlFor="password"
-                    className="text-input-label ml-1"
-                >
-                    Secret Phrase
-                </label>
-            </div>
+        <div>
+          <label
+            htmlFor="password"
+            className="block text-xs font-bold uppercase tracking-widest text-slate-500 ml-1 mb-1.5"
+          >
+            Secret Phrase
+          </label>
           <div className="relative">
              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-lg">key</span>
             <input
@@ -120,7 +118,7 @@ export default function LoginForm() {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className={`w-full bg-black/30 border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm text-white placeholder:text-slate-600 focus:ring-0 focus:outline-none input-glow transition-all ${
+                className={`w-full bg-black/30 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm text-white placeholder:text-slate-600 focus:ring-0 focus:outline-none input-glow transition-all ${
                 validationErrors.password ? 'border-red-500/50' : ''
                 }`}
                 placeholder="••••••••"
@@ -143,26 +141,27 @@ export default function LoginForm() {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full btn-primary py-4 rounded-xl mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full btn-cosmic py-4 rounded-xl text-white font-bold uppercase tracking-[0.2em] text-sm mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? "Authenticating..." : "Resume Journey"}
         </button>
 
-        {/* Register Link */}
-        <div className="mt-6 text-center space-y-4">
-            <Link href="/forgot-phrase" className="block text-slate-500 hover:text-slate-300 text-xs transition-colors">
-                Forgot Secret Phrase?
-            </Link>
-            <div className="pt-4 border-t border-white/5">
-                <Link
-                    href="/register"
-                    className="text-slate-400 hover:text-white text-sm transition-colors border-b border-transparent hover:border-primary pb-0.5"
-                >
-                    New Chronicler? <span className="text-primary font-semibold">Register</span>
-                </Link>
-            </div>
-        </div>
       </form>
+
+      {/* Register Link Moved OUTSIDE form to match design spacing */}
+      <div className="mt-6 text-center space-y-4">
+          <Link href="/forgot-phrase" className="block text-slate-500 hover:text-slate-300 text-xs transition-colors">
+              Forgot Secret Phrase?
+          </Link>
+          <div className="pt-4 border-t border-white/5">
+              <Link
+                  href="/register"
+                  className="text-slate-400 hover:text-white text-sm transition-colors border-b border-transparent hover:border-primary pb-0.5"
+              >
+                  New Chronicler? <span className="text-primary font-semibold">Register</span>
+              </Link>
+          </div>
+      </div>
     </div>
   );
 }

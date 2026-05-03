@@ -93,25 +93,25 @@ export default function DualSidebar({
     <div className="flex h-full shrink-0 relative z-50">
       {/* Left Sidebar Rail (80px) - Matching Design Layout */}
       <aside className="w-20 bg-[#0F0F23] border-r border-white/5 flex flex-col items-center py-6 gap-8">
-        {/* Logo */}
-        <Link href="/" className="group mb-4">
-          <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-all duration-500 group-hover:scale-110">
-            <span className="material-symbols-outlined text-white text-3xl">
+        {/* Logo - Perfectly Square high-contrast design */}
+        <Link href="/" className="group mb-8">
+          <div className="app-logo-box transition-all duration-500 group-hover:scale-105 group-hover:rotate-3">
+            <span className="material-symbols-outlined app-logo-icon">
               auto_awesome
             </span>
           </div>
         </Link>
 
         {/* Navigation Rail */}
-        <nav className="flex flex-col gap-6">
+        <nav className="flex flex-col gap-8">
           {iconNavItems.map((item) => (
             <Link
               key={item.id}
               href={item.href}
-              className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all duration-300 group ${
+              className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 group ${
                 currentActiveSection === item.id
-                  ? "text-[#F1E0FF] bg-primary/20 border-l-4 border-primary"
-                  : "text-white/30 hover:bg-white/5 hover:text-white"
+                  ? "bg-[#D8B4FE] text-[#581C87] shadow-[0_0_15px_rgba(216,180,254,0.4)]"
+                  : "text-white/70 hover:bg-white/5 hover:text-white"
               }`}
               title={item.label}
             >
@@ -131,12 +131,12 @@ export default function DualSidebar({
             <Link
               key={item.id}
               href={item.href}
-              className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 group ${
-                currentActiveSection === item.id ? "text-primary bg-primary/10" : "text-white/20 hover:text-white hover:bg-white/5"
+              className={`w-12 h-12 rounded-lg flex items-center justify-center transition-all duration-300 ${
+                currentActiveSection === item.id ? "text-primary bg-primary/10" : "text-white/70 hover:text-white hover:bg-white/5"
               }`}
               title={item.label}
             >
-              <span className="material-symbols-outlined text-xl">{item.icon}</span>
+              <span className="material-symbols-outlined text-2xl">{item.icon}</span>
             </Link>
           ))}
           <div className="w-10 h-10 rounded-full border border-white/10 overflow-hidden cursor-pointer hover:border-primary/50 transition-colors mt-2 ring-2 ring-white/5">
@@ -177,11 +177,11 @@ export default function DualSidebar({
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 group ${
                   currentActiveSection === item.id
                     ? "sidebar-item-active"
-                    : "text-white/50 hover:text-white hover:bg-white/5"
+                    : "text-white/70 hover:text-white hover:bg-white/5"
                 }`}
               >
                 <span className={`material-symbols-outlined text-[20px] transition-all duration-300 group-hover:scale-110 ${
-                  currentActiveSection === item.id ? "text-[#F1E0FF]" : "opacity-40"
+                  currentActiveSection === item.id ? "text-[#F1E0FF]" : ""
                 }`}>
                   {item.icon}
                 </span>
@@ -199,9 +199,9 @@ export default function DualSidebar({
               <Link
                 key={item.id}
                 href={item.href}
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-white/30 hover:text-white hover:bg-white/5 transition-all group"
+                className="flex items-center gap-3 px-4 py-3 rounded-lg text-white/60 hover:text-white hover:bg-white/5 transition-all group"
               >
-                <span className="material-symbols-outlined text-[20px] opacity-30 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">
+                <span className="material-symbols-outlined text-xl transition-all duration-300">
                   {item.icon}
                 </span>
                 <span className="text-sm font-semibold tracking-tight truncate">{item.label}</span>
@@ -224,21 +224,21 @@ export default function DualSidebar({
         </nav>
 
         {/* Management (Settings/Support with labels) */}
-        <div className="mt-auto pb-8 px-4 space-y-1">
+        <div className="mt-auto p-4 space-y-1">
           {finalManagementItems.map((item) => (
             <Link
               key={item.id}
               href={item.href}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 group ${
+              className={`flex items-center gap-3 px-4 py-2 rounded-lg transition-colors text-sm ${
                 currentActiveSection === item.id
                   ? "bg-white/5 text-white"
-                  : "text-white/30 hover:text-white hover:bg-white/5"
+                  : "text-white/40 hover:text-white/80"
               }`}
             >
-              <span className="material-symbols-outlined text-[20px] opacity-30 group-hover:opacity-100 transition-all duration-300">
+              <span className="material-symbols-outlined text-xl">
                 {item.icon}
               </span>
-              <span className="text-sm font-semibold tracking-tight truncate">{item.label}</span>
+              <span className="font-medium truncate">{item.label}</span>
             </Link>
           ))}
         </div>

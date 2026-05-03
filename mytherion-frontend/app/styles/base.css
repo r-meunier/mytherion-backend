@@ -1,0 +1,225 @@
+/**
+ * @file base.css
+ * @description The "Interface" (Base Style) of the Mytherion Design System.
+ * This file defines the core semantic variables, Tailwind foundations, and universal resets.
+ * 
+ * @inheritance
+ * This file is the root of the CSS tree. All other section-specific CSS files 
+ * (@auth.css, @projects.css, @app-core.css) MUST import this file first.
+ */
+
+@import "tailwindcss";
+
+/**
+ * @section Global Variables
+ * @description Core brand colors and semantic tokens used across the entire application.
+ * These can be overridden in child styles to change the section-specific theme.
+ */
+:root {
+  /* Brand Colors */
+  --primary: #ddb7ff;
+  --secondary: #fbbf24;
+  --background-light: #f8fafc;
+  --background-dark: #0F0F23;
+  --surface-dark: #16111B;
+  
+  /* Glassmorphism Defaults */
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  
+  /* Decorative Colors */
+  --nebula-purple: rgba(168, 85, 247, 0.25);
+  --nebula-blue: rgba(99, 102, 241, 0.15);
+  --gold: #E6E1E5;
+  
+  /* Semantic Text Colors (Slate Based) */
+  --text-main: #f1f5f9;      /* Slate-100 */
+  --text-card: #e2e8f0;      /* Slate-200 */
+  --text-muted: #94a3b8;     /* Slate-400 */
+  --text-dim: #64748b;       /* Slate-500 */
+}
+
+/**
+ * @section Tailwind Theme Configuration
+ * @description Inline theme definitions for Tailwind v4 compatibility.
+ */
+@theme inline {
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-background-light: var(--background-light);
+  --color-background-dark: var(--background-dark);
+  --color-surface-dark: var(--surface-dark);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-outfit);
+  --font-serif: var(--font-cinzel);
+  --font-script: var(--font-great-vibes);
+  --color-gold: var(--gold);
+}
+
+/**
+ * @section Universal Resets
+ * @description Essential base styles for body, scrollbars, and selection.
+ */
+body {
+  background: var(--background-dark);
+  color: #f1f5f9;
+  font-family:
+    var(--font-inter),
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+  min-height: 100vh;
+}
+
+/**
+ * @section Shared Design Tokens
+ * @description Core visual primitives like glassmorphism and gold text.
+ */
+
+/* Standard Glassmorphism */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Glassmorphism Card with Hover state */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--glass-border);
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  border-color: rgba(168, 85, 247, 0.5);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+  transform: translateY(-4px);
+}
+
+/* Premium Gold Gradient Text */
+.gold-text {
+  background: linear-gradient(to bottom, #fbbf24 0%, #b45309 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.2);
+}
+
+/**
+ * @section Scrollbars & Interaction
+ * @description Custom scrollbar styles and text selection colors.
+ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.3);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(168, 85, 247, 0.5);
+}
+
+/* Icon Font Configuration */
+.material-symbols-outlined {
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 400,
+    "GRAD" 0,
+    "opsz" 24;
+  user-select: none;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
+  font-display: block;
+  width: 1em;
+  height: 1em;
+  overflow: hidden;
+  white-space: nowrap;
+  letter-spacing: normal;
+  text-transform: none;
+  word-wrap: normal;
+  direction: ltr;
+}
+
+::selection {
+  background: rgba(168, 85, 247, 0.3);
+  color: white;
+}
+
+/**
+ * @section Semantic Typography Utilities
+ * @description Standardized typography classes used throughout the app.
+ */
+
+@utility text-display-lg {
+  font-family: var(--font-display);
+  font-size: 36px; /* Exact design match */
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #FFFFFF;
+}
+
+@utility text-subtitle-muted {
+  font-size: 0.9375rem; /* ~15px matching design */
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5); /* Matching design opacity */
+  letter-spacing: 0.01em;
+  line-height: 1.6;
+}
+
+@utility app-logo-box {
+  width: 48px;
+  height: 48px;
+  background-color: #D8B4FE; /* High contrast light purple */
+  border-radius: 12px; /* Subtle rounding, closer to "perfectly square" */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+}
+
+@utility app-logo-icon {
+  color: #581C87; /* Deep purple "dark stars" */
+  font-size: 28px;
+}
+
+@utility text-logo {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+}
+
+/**
+ * @section Shared Component Utilities
+ * @description Reusable semantic components like the primary button.
+ */
+
+@utility btn-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, #6366f1 100%);
+  color: white;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.875rem;
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+  transition: all 0.3s ease;
+}

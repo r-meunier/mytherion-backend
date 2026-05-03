@@ -1,15 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "./store/hooks";
-import { checkAuth } from "./store/authSlice";
-import { fetchDashboardStats } from "./store/dashboardSlice";
-import { fetchProjects, clearCurrentProject } from "./store/projectSlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { checkAuth } from "../store/authSlice";
+import { fetchDashboardStats } from "../store/dashboardSlice";
+import { fetchProjects, clearCurrentProject } from "../store/projectSlice";
 import { useRouter } from "next/navigation";
-import DualSidebar from "./components/DualSidebar";
-import DashboardHeader from "./components/DashboardHeader";
-import ProjectList from "./components/projects/ProjectList";
-import ProjectModal from "./components/projects/ProjectModal";
+import DualSidebar from "../components/DualSidebar";
+import DashboardHeader from "../components/DashboardHeader";
+import ProjectList from "../components/projects/ProjectList";
+import ProjectFilters from "../components/projects/ProjectFilters";
+import ProjectModal from "../components/projects/ProjectModal";
 
 export default function Home() {
   const dispatch = useAppDispatch();
@@ -63,51 +64,21 @@ export default function Home() {
           {/* Section Header & Filter Bar (Exact Match) */}
           <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-12">
             <div>
-              <h1 className="text-display-lg text-[#E6E1E5]">
+              <h1 className="text-display-lg">
                 Your Worlds
               </h1>
-              <p className="text-white/40 mt-1 font-medium tracking-wide">
+              <p className="text-subtitle-muted mt-1 max-w-md">
                 Access and manage your multi-verse projects.
               </p>
             </div>
             
-            {/* Filter Bar (Precise Design Specs) */}
-            <div className="flex items-center gap-2 p-1 glass-card rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.6)] border-white/5 bg-black/40">
-              <button 
-                onClick={() => setActiveFilter("all")}
-                className={`px-5 py-1.5 rounded-full text-[13px] font-bold transition-all duration-300 ${
-                  activeFilter === "all" 
-                    ? "bg-[#D8B4FE] text-[#581C87] shadow-lg" 
-                    : "text-white/40 hover:text-white hover:bg-white/5"
-                }`}
-              >
-                All Projects
-              </button>
-              <button 
-                onClick={() => setActiveFilter("edited")}
-                className={`px-5 py-1.5 rounded-full text-[13px] font-bold transition-all duration-300 ${
-                  activeFilter === "edited" 
-                    ? "bg-[#D8B4FE] text-[#581C87] shadow-lg" 
-                    : "text-white/40 hover:text-white hover:bg-white/5"
-                }`}
-              >
-                Recently Edited
-              </button>
-              <button 
-                onClick={() => setActiveFilter("favorites")}
-                className={`px-5 py-1.5 rounded-full text-[13px] font-bold transition-all duration-300 ${
-                  activeFilter === "favorites" 
-                    ? "bg-[#D8B4FE] text-[#581C87] shadow-lg" 
-                    : "text-white/40 hover:text-white hover:bg-white/5"
-                }`}
-              >
-                Favorites
-              </button>
-              <div className="w-px h-5 bg-white/10 mx-1"></div>
-              <button className="w-9 h-9 rounded-full flex items-center justify-center text-white/30 hover:text-white hover:bg-white/5 transition-all">
-                <span className="material-symbols-outlined text-[20px]">filter_list</span>
-              </button>
-            </div>
+            {/* Filter Bar (New Logical UX) */}
+            <ProjectFilters 
+              onSearchChange={(q) => console.log("Search:", q)}
+              onSortChange={(s) => console.log("Sort:", s)}
+              onGroupChange={(g) => console.log("Group:", g)}
+              onViewChange={(v) => console.log("View:", v)}
+            />
           </div>
 
           {/* Library Grid */}

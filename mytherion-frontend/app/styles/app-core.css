@@ -1,0 +1,67 @@
+/**
+ * @file app-core.css
+ * @description Standardized child style for the Core Application Experience.
+ * Contains shared logic for the world editor, entity management, and complex UI behaviors.
+ * 
+ * @inheritance
+ * Inherits from @base.css.
+ */
+
+@import "./base.css";
+
+/**
+ * @section Universal UI Components
+ * @description Complex components used across the inner application.
+ */
+
+/* Premium Modal Border Glow */
+.modal-border-glow {
+  box-shadow:
+    0 0 0 1px rgba(168, 85, 247, 0.3),
+    0 0 15px rgba(168, 85, 247, 0.2),
+    inset 0 0 15px rgba(251, 191, 36, 0.1);
+}
+
+/* High-Interaction Button Utility */
+.btn-cosmic {
+  background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+  transition: all 0.3s ease;
+}
+
+.btn-cosmic:hover {
+  box-shadow: 0 0 30px rgba(168, 85, 247, 0.6);
+  transform: translateY(-1px);
+}
+
+@utility text-admin-badge {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/**
+ * @section Animations
+ * @description Custom keyframe animations for application state changes.
+ */
+
+/* Smooth Horizontal Progress Bar */
+@keyframes loading-bar {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-loading-bar {
+  animation: loading-bar 2s infinite linear;
+}
+
+/* Subtle Vertical Floating Animation */
+@keyframes bounce-subtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-bounce-subtle {
+  animation: bounce-subtle 3s infinite ease-in-out;
+}

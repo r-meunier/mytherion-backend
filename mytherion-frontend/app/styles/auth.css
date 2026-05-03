@@ -1,0 +1,109 @@
+/**
+ * @file auth.css
+ * @description Specialized child style for the Authentication section (Login/Register).
+ * strictly follows the Mytherion high-fidelity design specifications.
+ * 
+ * @inheritance
+ * Inherits from @base.css.
+ * Overrides core variables to achieve the "Deep Library" aesthetic.
+ */
+
+@import "./base.css";
+
+/**
+ * @section Variable Overrides
+ * @description Precise color and glass tokens from the design specs.
+ */
+:root {
+  /* Design-Specific Overrides */
+  --primary: #A855F7; /* Vivid purple from design specs */
+  --background-dark: #050510;
+  --glass-bg: rgba(15, 15, 35, 0.4);
+  --glass-border: rgba(251, 191, 36, 0.2);
+  --nebula-purple: rgba(168, 85, 247, 0.15);
+  --nebula-blue: rgba(30, 64, 175, 0.15);
+}
+
+/**
+ * @section Component Logic
+ * @description Specialized classes used only in the authentication portal.
+ */
+
+/* High-Fidelity Glass Card Override */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+  /* Disable inheritance from base.css */
+  transform: none !important;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.glass-card:hover {
+  transform: none !important;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8) !important;
+  border-color: var(--glass-border) !important;
+}
+
+/* Cosmic Button with Hover Animation (Design Spec) */
+.btn-cosmic {
+  background: linear-gradient(135deg, #A855F7 0%, #6366F1 100%);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+  transition: all 0.3s ease;
+}
+
+.btn-cosmic:hover {
+  box-shadow: 0 0 30px rgba(168, 85, 247, 0.6);
+  transform: translateY(-1px);
+}
+
+/* Animated Starfield Background */
+.starfield {
+  background-image: 
+    radial-gradient(1px 1px at 20px 30px, #fff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 40px 70px, #fff, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 130px 80px, #fff, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 160px 120px, #ddd, rgba(0,0,0,0));
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  opacity: 0.3;
+}
+.nebula {
+  background: 
+    radial-gradient(circle at 20% 30%, var(--nebula-purple) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, var(--nebula-blue) 0%, transparent 50%);
+  filter: blur(60px);
+}
+
+/* Input Focus States */
+.input-glow:focus {
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+  border-color: rgba(168, 85, 247, 0.5);
+}
+
+/* Atmospheric Floating Symbols */
+.floating-element {
+  pointer-events: none;
+  opacity: 0.15;
+  filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.5));
+}
+
+/* Huge Decorative Icons - Exact Design Sizes */
+.huge-icon-scribe {
+  font-size: 120px !important;
+}
+
+.huge-icon-explore {
+  font-size: 140px !important;
+}
+
+.floating-element .material-symbols-outlined {
+  width: auto !important;
+  height: auto !important;
+  overflow: visible !important;
+  line-height: 1 !important;
+  display: block !important;
+}
