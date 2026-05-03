@@ -9,9 +9,17 @@ interface ProjectCardProps {
   project: Project;
   onEdit: (id: number) => void;
   onDelete: (id: number) => void;
+  onCancelDelete?: () => void;
+  isDeleteConfirm?: boolean;
 }
 
-export default function ProjectCard({ project, onEdit, onDelete }: ProjectCardProps) {
+export default function ProjectCard({ 
+  project, 
+  onEdit, 
+  onDelete,
+  onCancelDelete,
+  isDeleteConfirm = false
+}: ProjectCardProps) {
   const isMounted = useIsMounted();
 
   const formatDate = (dateString: string) => {
@@ -83,11 +91,27 @@ export default function ProjectCard({ project, onEdit, onDelete }: ProjectCardPr
 
         {/* Metadata Footer */}
         <div className="mt-auto space-y-4">
-          {/* Genre Badge (Moved from Image) */}
-          <div className="flex">
+          <div className="flex justify-between items-center">
             <span className="px-2.5 py-0.5 bg-primary/10 border border-primary/20 rounded-full text-[9px] font-black text-primary uppercase tracking-[0.2em]">
               {project.genre || "Primary"}
             </span>
+            
+            <div className="flex items-center gap-1">
+              <button 
+                onClick={(e) => { e.stopPropagation(); onEdit(project.id); }}
+                title="Edit project"
+                className="w-8 h-8 rounded-lg flex items-center justify-center text-white/20 hover:text-white hover:bg-white/5 transition-all relative z-20"
+              >
+                <span className="material-symbols-outlined text-[18px]">edit</span>
+              </button>
+              <button 
+                onClick={(e) => { e.stopPropagation(); onDelete(project.id); }}
+                title="Delete project"
+                className="w-8 h-8 rounded-lg flex items-center justify-center text-white/20 hover:text-red-400 hover:bg-red-400/5 transition-all relative z-20"
+              >
+                <span className="material-symbols-outlined text-[18px]">delete</span>
+              </button>
+            </div>
           </div>
 
           <div className="flex items-center gap-5">
@@ -110,6 +134,31 @@ export default function ProjectCard({ project, onEdit, onDelete }: ProjectCardPr
           </div>
         </div>
       </div>
+      
+      {/* Delete Confirmation Overlay (Arcane Style) */}
+      {isDeleteConfirm && (
+        <div className="absolute inset-0 z-30 bg-[#1A1625]/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center animate-in fade-in duration-300">
+          <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mb-4 border border-red-500/20">
+            <span className="material-symbols-outlined text-red-400 text-[32px]">warning</span>
+          </div>
+          <h4 className="text-white font-bold text-lg mb-2">Delete this project?</h4>
+          <p className="text-white/40 text-xs mb-6">This action cannot be undone.</p>
+          <div className="flex gap-3 w-full">
+            <button 
+              onClick={(e) => { e.stopPropagation(); onCancelDelete?.(); }}
+              className="flex-1 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-white/60 text-xs font-bold hover:bg-white/10 transition-colors"
+            >
+              Cancel
+            </button>
+            <button 
+              onClick={(e) => { e.stopPropagation(); onDelete(project.id); }}
+              className="flex-1 px-4 py-2 bg-red-500/20 border border-red-500/30 rounded-xl text-red-400 text-xs font-bold hover:bg-red-500/30 transition-colors"
+            >
+              Confirm Delete
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

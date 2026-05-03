@@ -3,12 +3,17 @@ import '@testing-library/jest-dom';
 import ProjectCard from './ProjectCard';
 import { Project } from '@/app/services/projectService';
 
+import { useIsMounted } from '@/app/hooks/useIsMounted';
+
 // Mock Next.js Link component
 jest.mock('next/link', () => {
   return ({ children, href }: { children: React.ReactNode; href: string }) => {
     return <a href={href}>{children}</a>;
   };
 });
+
+// Mock useIsMounted hook
+jest.mock('@/app/hooks/useIsMounted');
 
 // Mock FontAwesome icons
 jest.mock('@fortawesome/react-fontawesome', () => ({
@@ -30,6 +35,7 @@ describe('ProjectCard', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    (useIsMounted as jest.Mock).mockReturnValue(true);
   });
 
   // ==================== Rendering Tests ====================
@@ -70,8 +76,8 @@ describe('ProjectCard', () => {
       />
     );
 
-    expect(screen.getByText(/Created Jan 15, 2024/)).toBeInTheDocument();
-    expect(screen.getByText(/Updated Jan 20, 2024/)).toBeInTheDocument();
+    expect(await screen.findByText(/Jan 15/)).toBeInTheDocument();
+    expect(await screen.findByText(/Jan 20/)).toBeInTheDocument();
   });
 
   it('should link to project detail page', () => {

@@ -1,0 +1,70 @@
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import DashboardHeader from './DashboardHeader';
+import { useAppSelector, useAppDispatch } from '../store/hooks';
+import { useRouter, usePathname } from 'next/navigation';
+
+// Mock Redux hooks
+jest.mock('../store/hooks', () => ({
+  useAppSelector: jest.fn(),
+  useAppDispatch: jest.fn(),
+}));
+
+// Mock Next.js navigation
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(),
+  usePathname: jest.fn(),
+}));
+
+describe('DashboardHeader High Fidelity', () => {
+  const mockUser = {
+    id: 1,
+    username: 'Alistair Thorne',
+    role: 'ADMIN',
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    (usePathname as jest.Mock).mockReturnValue('/');
+    (useAppSelector as jest.Mock).mockReturnValue({
+      isAuthenticated: true,
+      user: mockUser,
+      isInitialized: true,
+    });
+  });
+
+  it('renders the Search archives input with correct placeholder', () => {
+    render(<DashboardHeader />);
+    
+    expect(screen.getByPlaceholderText('Search archives...')).toBeInTheDocument();
+    expect(screen.getByText('search')).toBeInTheDocument(); // Icon symbol
+  });
+
+  it('renders the notifications button', () => {
+    render(<DashboardHeader />);
+    
+    expect(screen.getByText('notifications')).toBeInTheDocument();
+  });
+
+  it('transforms "Dashboard" link to "Back to Worlds" when in project mode', () => {
+    (usePathname as jest.Mock).mockReturnValue('/projects/1');
+    
+    render(<DashboardHeader />);
+    
+    expect(screen.getByText('Back to Worlds')).toBeInTheDocument();
+    expect(screen.getByText('arrow_back')).toBeInTheDocument(); // Back icon
+  });
+
+  it('renders the Arbiter status in the profile dropdown (hidden by default)', () => {
+    render(<DashboardHeader />);
+    
+    // The text should be in the document (hidden by CSS/Opacity)
+    expect(screen.getByText('Arbiter Level 4')).toBeInTheDocument();
+  });
+
+  it('renders "Archivist Level 4" sub-branding in the header', () => {
+    render(<DashboardHeader />);
+    
+    expect(screen.getByText('Archivist Level 4')).toBeInTheDocument();
+  });
+});

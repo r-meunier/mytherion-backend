@@ -62,7 +62,6 @@ export default function ProjectForm({ project, onSubmit, onCancel, loading }: Pr
           } rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all`}
           placeholder="Enter project name"
           disabled={loading}
-          maxLength={255}
         />
         {errors.name && <p className="mt-2 text-sm text-red-400">{errors.name}</p>}
         <p className="mt-1 text-xs text-slate-500">{name.length}/255 characters</p>

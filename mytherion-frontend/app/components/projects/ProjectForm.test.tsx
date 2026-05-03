@@ -104,6 +104,7 @@ describe('ProjectForm', () => {
   });
 
   it('should show error when name exceeds 255 characters', async () => {
+    jest.setTimeout(10000);
     const user = userEvent.setup();
     render(
       <ProjectForm

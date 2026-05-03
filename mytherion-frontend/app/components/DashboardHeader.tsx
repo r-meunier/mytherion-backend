@@ -116,7 +116,9 @@ export default function DashboardHeader({ onCreateProject }: DashboardHeaderProp
                   <div className="p-3 space-y-1">
                     <div className="px-3 py-2 border-b border-white/5 mb-1">
                       <p className="text-xs font-bold text-white truncate">{user.username || user.email}</p>
-                      <p className="text-[10px] text-primary uppercase tracking-[0.2em] mt-0.5">Arbiter Level 4</p>
+                      <p className="text-[10px] text-primary uppercase tracking-[0.2em] mt-0.5">
+                        {user.role === 'ADMIN' ? 'Arbiter' : 'Verified User'} Level 4
+                      </p>
                     </div>
                     <Link 
                       href="#"

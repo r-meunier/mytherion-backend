@@ -14,6 +14,7 @@ jest.mock('../store/hooks', () => ({
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
+  usePathname: jest.fn(),
 }));
 
 jest.mock('../store/authSlice', () => ({
@@ -74,7 +75,7 @@ describe('DashboardHeader', () => {
 
     render(<DashboardHeader />);
     expect(screen.getByText(mockUser.username)).toBeInTheDocument();
-    expect(screen.getByText('Verified User')).toBeInTheDocument();
+    expect(screen.getByText(/Verified User/i)).toBeInTheDocument();
     expect(screen.queryByText('Arbiter')).not.toBeInTheDocument();
   });
 
@@ -86,7 +87,7 @@ describe('DashboardHeader', () => {
     });
 
     render(<DashboardHeader />);
-    expect(screen.getByText('Arbiter')).toBeInTheDocument();
+    expect(screen.getByText(/Arbiter/i)).toBeInTheDocument();
   });
 
   it('shows dropdown menu on hover and hides on mouse leave', () => {

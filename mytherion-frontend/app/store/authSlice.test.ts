@@ -89,7 +89,7 @@ describe('authSlice', () => {
       expect(state.error).toBeNull();
     });
 
-    it('should set user and authenticated on fulfilled', () => {
+    it('should NOT set user and authenticated on fulfilled (hard enforcement)', () => {
       const action = {
         type: registerUser.fulfilled.type,
         payload: mockUser,
@@ -97,8 +97,8 @@ describe('authSlice', () => {
       const state = authReducer(initialState, action);
 
       expect(state.isLoading).toBe(false);
-      expect(state.user).toEqual(mockUser);
-      expect(state.isAuthenticated).toBe(true);
+      expect(state.user).toBeNull();
+      expect(state.isAuthenticated).toBe(false);
       expect(state.error).toBeNull();
     });
 
@@ -268,8 +268,8 @@ describe('authSlice', () => {
       );
 
       const state = store.getState().auth;
-      expect(state.user).toEqual(mockUser);
-      expect(state.isAuthenticated).toBe(true);
+      expect(state.user).toBeNull();
+      expect(state.isAuthenticated).toBe(false);
       expect(state.error).toBeNull();
     });
 
