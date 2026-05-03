@@ -19,6 +19,7 @@
   /* Brand Colors */
   --primary: #ddb7ff;
   --secondary: #fbbf24;
+  --error: #ffb4ab;
   --background-light: #f8fafc;
   --background-dark: #0F0F23;
   --surface-dark: #16111B;
@@ -46,6 +47,7 @@
 @theme inline {
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
+  --color-error: var(--error);
   --color-background-light: var(--background-light);
   --color-background-dark: var(--background-dark);
   --color-surface-dark: var(--surface-dark);
@@ -222,4 +224,54 @@ body {
   font-size: 0.875rem;
   box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
   transition: all 0.3s ease;
+}
+
+/* Glassy Workspace Buttons */
+.btn-glass {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-weight: 700;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-glass:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-glass .material-symbols-outlined {
+  color: var(--primary);
+  transition: transform 0.3s ease;
+  font-size: 20px;
+}
+
+.btn-glass:hover .material-symbols-outlined {
+  transform: scale(1.1);
+}
+
+/* Small Variant for cards/utility */
+.btn-glass-sm {
+  padding: 6px;
+  border-radius: 8px;
+}
+
+.btn-glass-sm .material-symbols-outlined {
+  font-size: 18px;
+}
+
+/* Danger Variant for delete/remove */
+.btn-glass-danger:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #fee2e2;
+}
+
+.btn-glass-danger:hover .material-symbols-outlined {
+  color: #f87171;
 }

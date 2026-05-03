@@ -30,22 +30,51 @@ export default function DashboardHeader({ onCreateProject }: DashboardHeaderProp
 
   return (
     <header className="h-16 flex items-center justify-between px-8 border-b border-white/5 bg-[#16111B]/80 backdrop-blur-xl relative z-50">
-      {/* Left Side: Navigation Tabs */}
-      <nav className="flex items-center gap-1 h-full">
-        {navItems.map((item) => (
-          <Link
-            key={item.label}
-            href={item.href}
-            className={`text-sm font-medium h-full px-6 flex items-center transition-all duration-300 relative top-[1px] ${
-              item.active 
-                ? "text-[#D8B4FE] border-b-2 border-[#A855F7] bg-white/[0.04]" 
-                : "text-white/70 hover:text-[#D8B4FE] hover:bg-white/[0.02]"
-            }`}
-          >
-            {item.label}
-          </Link>
-        ))}
-      </nav>
+      {/* Left Side: Branding & Navigation Tabs */}
+      <div className="flex items-center gap-8 h-full">
+        {/* Branding */}
+        <Link href="/" className="group flex items-center gap-3 mr-4">
+          <div className="w-10 h-10 bg-primary/20 rounded-xl flex items-center justify-center border border-primary/30 transition-all duration-500 group-hover:scale-105 group-hover:rotate-3 shadow-lg shadow-primary/10">
+            <span className="material-symbols-outlined text-primary text-[24px]">auto_awesome</span>
+          </div>
+          <div className="hidden sm:flex flex-col">
+            <h2 className="text-xl font-bold tracking-tighter text-white drop-shadow-[0_0_8px_rgba(168,85,247,0.3)] leading-none">
+              Mytherion
+            </h2>
+            <p className="text-[9px] text-white/30 font-bold uppercase tracking-[0.3em] mt-1">
+              Archivist Level 4
+            </p>
+          </div>
+        </Link>
+
+        <nav className="flex items-center gap-1 h-full">
+          {navItems.map((item) => {
+            // Transform Dashboard into "Back to Worlds" in project mode
+            const isDashboard = item.label === "Dashboard";
+            const isProjectMode = pathname.startsWith("/projects/");
+            const displayLabel = isDashboard && isProjectMode ? "Back to Worlds" : item.label;
+            
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                className={`text-sm font-medium h-full px-5 flex items-center transition-all duration-300 relative top-[1px] group/nav ${
+                  item.active 
+                    ? "text-[#D8B4FE] border-b-2 border-[#A855F7] bg-white/[0.04]" 
+                    : "text-white/70 hover:text-[#D8B4FE] hover:bg-white/[0.02]"
+                }`}
+              >
+                {isDashboard && isProjectMode && (
+                  <span className="material-symbols-outlined text-[18px] mr-2 transition-transform group-hover/nav:-translate-x-1">
+                    arrow_back
+                  </span>
+                )}
+                {displayLabel}
+              </Link>
+            );
+          })}
+        </nav>
+      </div>
 
       {/* Right Side Actions */}
       <div className="flex items-center gap-4">

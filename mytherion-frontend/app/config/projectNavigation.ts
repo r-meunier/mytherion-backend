@@ -6,36 +6,40 @@ export interface NavItem {
 }
 
 /**
- * Get global icon-level navigation (leftmost bar)
+ * Get unified icon-level navigation (leftmost bar)
+ * Includes 'Portal' (Worlds) and project-specific modules
+ */
+export const getProjectIconItems = (projectId?: number): NavItem[] => [
+  { id: "overview", icon: "public", label: "Overview", href: projectId ? `/projects/${projectId}` : "/" },
+  { id: "entities", icon: "menu_book", label: "Codex", href: projectId ? `/projects/${projectId}/entities` : "#" },
+  { id: "timeline", icon: "history_edu", label: "Timeline", href: "#" },
+  { id: "atlas", icon: "map", label: "Atlas", href: "#" },
+];
+
+/**
+ * Legacy support for global icons
  */
 export const getGlobalIconItems = (): NavItem[] => [
   { id: "projects", icon: "public", label: "Worlds", href: "/" },
-  { id: "lorebook", icon: "library_books", label: "Codex", href: "#" },
-  { id: "timeline", icon: "history_edu", label: "Timeline", href: "#" },
-  { id: "characters", icon: "group", label: "Characters", href: "#" },
-  { id: "atlas", icon: "map", label: "Atlas", href: "#" },
+  ...getProjectIconItems().slice(1)
 ];
 
 /**
- * Get project-specific icon-level navigation (leftmost bar)
+ * Get unified navigation items (middle bar)
  */
-export const getProjectIconItems = (projectId: number): NavItem[] => [
-  { id: "overview", icon: "dashboard", label: "Dashboard", href: `/projects/${projectId}` },
-  { id: "entities", icon: "menu_book", label: "Codex", href: `/projects/${projectId}/entities` },
-  { id: "timeline", icon: "history_edu", label: "Timeline", href: "#" },
-  { id: "atlas", icon: "map", label: "Atlas", href: "#" },
-];
-
-/**
- * Get global navigation items (middle bar)
- */
-export const getGlobalNavItems = (): NavItem[] => [
-  { id: "projects", label: "Worlds", href: "/", icon: "public" },
-  { id: "lorebook", label: "Codex", href: "#", icon: "library_books" },
+export const getProjectNavItems = (projectId?: number): NavItem[] => [
+  { id: "overview", label: "Overview", href: projectId ? `/projects/${projectId}` : "/", icon: "public" },
+  { id: "entities", label: "Codex", href: projectId ? `/projects/${projectId}/entities` : "#", icon: "menu_book" },
   { id: "timeline", label: "Timeline", href: "#", icon: "history_edu" },
   { id: "characters", label: "Characters", href: "#", icon: "group" },
   { id: "atlas", label: "Atlas", href: "#", icon: "map" },
+  { id: "notes", label: "Project Notes", href: "#", icon: "note_alt" },
 ];
+
+/**
+ * Legacy support for global nav
+ */
+export const getGlobalNavItems = (): NavItem[] => getProjectNavItems();
 
 /**
  * Get global library items
@@ -45,28 +49,14 @@ export const getGlobalLibraryItems = (): NavItem[] => [
 ];
 
 /**
- * Get global management items (Bottom section)
+ * Get management items (Bottom section)
  */
-export const getGlobalManagementItems = (): NavItem[] => [
+export const getManagementItems = (projectId?: number): NavItem[] => [
   { id: "settings", label: "Settings", href: "#", icon: "settings" },
   { id: "support", label: "Support", href: "#", icon: "help" },
 ];
 
 /**
- * Get navigation items for a specific project
+ * Legacy support for global management
  */
-export const getProjectNavItems = (projectId: number): NavItem[] => [
-  { id: "overview", label: "Overview", href: `/projects/${projectId}`, icon: "dashboard" },
-  { id: "entities", label: "Codex", href: `/projects/${projectId}/entities`, icon: "menu_book" },
-  { id: "timeline", label: "Timeline", href: "#", icon: "history_edu" },
-  { id: "atlas", label: "Atlas", href: "#", icon: "map" },
-  { id: "notes", label: "Project Notes", href: "#", icon: "note_alt" },
-];
-
-/**
- * Get management items for project sidebar
- */
-export const getManagementItems = (projectId: number): NavItem[] => [
-  { id: "settings", label: "Settings", href: "#", icon: "settings" },
-  { id: "support", label: "Support", href: "#", icon: "help" },
-];
+export const getGlobalManagementItems = (): NavItem[] => getManagementItems();

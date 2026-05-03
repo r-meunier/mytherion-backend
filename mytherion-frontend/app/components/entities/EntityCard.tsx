@@ -54,18 +54,18 @@ export default function EntityCard({ entity, onEdit, onDelete }: EntityCardProps
         <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
           <button
             onClick={handleEdit}
-            className="p-1.5 rounded-lg glass hover:bg-primary hover:text-white transition-all"
+            className="btn-glass-sm"
             title="Edit"
           >
-            <span className="material-symbols-outlined text-[16px]">edit</span>
+            <span className="material-symbols-outlined text-[18px]">edit</span>
           </button>
           {onDelete && (
             <button
               onClick={handleDelete}
-              className="p-1.5 rounded-lg glass hover:bg-red-600 hover:text-white transition-all"
+              className="btn-glass-sm btn-glass-danger"
               title="Delete"
             >
-              <span className="material-symbols-outlined text-[16px]">delete</span>
+              <span className="material-symbols-outlined text-[18px]">delete</span>
             </button>
           )}
         </div>

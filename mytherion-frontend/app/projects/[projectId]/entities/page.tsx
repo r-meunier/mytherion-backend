@@ -94,30 +94,31 @@ export default function EntitiesPage() {
   if (!currentProject) return null;
 
   return (
-    <div className="relative z-10 flex h-screen overflow-hidden">
-      <DualSidebar 
-        activeSection="entities"
-        projectId={projectId}
-      />
-      
-      <main className="flex-1 flex flex-col overflow-hidden">
-        <DashboardHeader />
+    <div className="flex flex-col h-screen overflow-hidden bg-[#16111B]">
+      {/* Background Ley Lines - Exact Design Atmosphere */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 bg-[#0F0F23]">
+        <div className="absolute top-[-20%] left-[-10%] w-[80%] h-[100%] bg-[#a855f7]/15 rounded-full blur-[180px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[70%] bg-[#fbbf24]/5 rounded-full blur-[160px]" />
+      </div>
 
-        <div className="flex-1 overflow-y-auto p-8 space-y-8">
+      {/* Header (Now Global Parent) */}
+      <DashboardHeader />
+
+      <div className="flex flex-1 overflow-hidden relative z-10">
+        <DualSidebar 
+          activeSection="entities"
+          projectId={projectId}
+          onCreateEntity={handleCreateClick}
+        />
+        
+        <main className="flex-1 flex flex-col overflow-hidden relative">
+
+        <div className="flex-1 overflow-y-auto p-[48px] space-y-[48px] scroll-smooth relative z-10 custom-scrollbar">
           <div>
-            <Link
-              href={`/projects/${projectId}`}
-              className="inline-flex items-center text-primary text-sm font-semibold hover:text-primary/80 transition-colors mb-4 group"
-            >
-              <span className="material-symbols-outlined text-sm mr-2 group-hover:-translate-x-1 transition-transform">
-                arrow_back
-              </span>
-              Back to {currentProject.name}
-            </Link>
-            <h2 className="text-5xl font-serif font-bold text-gold tracking-wide">
+            <h1 className="text-display-lg">
               Entity Codex
-            </h2>
-            <p className="text-page-subheader mt-2">
+            </h1>
+            <p className="text-subtitle-muted mt-1 max-w-md">
               Browse, search, and manage all entities in {currentProject.name}
             </p>
           </div>
@@ -136,6 +137,7 @@ export default function EntitiesPage() {
         projectId={projectId}
         entity={editingEntity}
       />
+      </div>
     </div>
   );
 }

@@ -87,10 +87,10 @@ export default function EntityList({ projectId, onCreateClick, onEditClick }: En
         {onCreateClick && (
           <button
             onClick={onCreateClick}
-            className="px-6 py-2.5 bg-primary hover:bg-primary/80 text-white font-semibold rounded-lg shadow-lg shadow-primary/20 transition-all whitespace-nowrap flex items-center gap-2"
+            className="btn-glass px-6 py-2.5 whitespace-nowrap"
           >
-            <span className="material-symbols-outlined text-[20px]">add_box</span>
-            <span>Create Entity</span>
+            <span className="material-symbols-outlined text-[20px]">add</span>
+            <span>Create New Entity</span>
           </button>
         )}
       </div>
@@ -176,10 +176,10 @@ export default function EntityList({ projectId, onCreateClick, onEditClick }: En
           {!hasActiveFilters && onCreateClick && (
             <button
               onClick={onCreateClick}
-              className="px-6 py-3 bg-primary hover:bg-primary/80 text-white font-semibold rounded-lg shadow-lg shadow-primary/20 transition-all inline-flex items-center gap-2"
+              className="btn-glass px-6 py-3"
             >
-              <span className="material-symbols-outlined text-[20px]">add_box</span>
-              <span>Create Entity</span>
+              <span className="material-symbols-outlined text-[20px]">add</span>
+              <span>Create New Entity</span>
             </button>
           )}
         </div>

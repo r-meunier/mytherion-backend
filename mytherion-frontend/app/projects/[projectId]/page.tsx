@@ -58,34 +58,32 @@ export default function ProjectDashboard() {
   }
 
   return (
-    <div className="relative z-10 flex h-screen overflow-hidden bg-[#16111B]">
+    <div className="flex flex-col h-screen overflow-hidden bg-[#16111B]">
       {/* Background Ley Lines - Exact Design Atmosphere */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 bg-[#0F0F23]">
         <div className="absolute top-[-20%] left-[-10%] w-[80%] h-[100%] bg-[#a855f7]/15 rounded-full blur-[180px]" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[70%] bg-[#fbbf24]/5 rounded-full blur-[160px]" />
       </div>
 
-      {/* Dual Sidebar with Project Context */}
-      <DualSidebar 
-        activeSection="overview" 
-        activeIcon="overview"
-        projectId={projectId}
-      />
+      {/* Header (Now Global Parent) */}
+      <DashboardHeader />
 
-      {/* Main Content Area */}
-      <main className="flex-1 flex flex-col overflow-hidden relative">
-        {/* Header */}
-        <DashboardHeader />
+      <div className="flex flex-1 overflow-hidden relative z-10">
+        {/* Dual Sidebar with Project Context */}
+        <DualSidebar 
+          activeSection="overview" 
+          activeIcon="overview"
+          projectId={projectId}
+        />
+
+        {/* Main Content Area */}
+        <main className="flex-1 flex flex-col overflow-hidden relative">
 
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto p-[48px] space-y-[48px] scroll-smooth relative z-10 custom-scrollbar">
           
           {/* Page Title & Back Link */}
           <div>
-            <Link href="/" className="inline-flex items-center text-primary text-xs font-bold uppercase tracking-widest hover:text-white transition-colors mb-4 group">
-              <span className="material-symbols-outlined text-[18px] mr-2 group-hover:-translate-x-1 transition-transform">arrow_back</span>
-              Back to Worlds
-            </Link>
             <h1 className="text-display-lg">
               {currentProject.name}
             </h1>
@@ -161,21 +159,22 @@ export default function ProjectDashboard() {
             <h3 className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] mb-6">Quick Create</h3>
             <div className="flex flex-wrap gap-4">
               <button className="flex items-center space-x-3 px-6 py-4 glass-card rounded-xl border-white/5 hover:border-primary/50 transition-all hover:bg-white/5 group bg-black/20">
-                <span className="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">person_add</span>
+                <span className="material-symbols-outlined text-primary group-hover:scale-110 transition-transform text-[24px]">person_add</span>
                 <span className="text-sm font-semibold text-slate-200">New Character</span>
               </button>
               <button className="flex items-center space-x-3 px-6 py-4 glass-card rounded-xl border-white/5 hover:border-primary/50 transition-all hover:bg-white/5 group bg-black/20">
-                <span className="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">add_location_alt</span>
+                <span className="material-symbols-outlined text-primary group-hover:scale-110 transition-transform text-[24px]">add_location_alt</span>
                 <span className="text-sm font-semibold text-slate-200">New Location</span>
               </button>
               <button className="flex items-center space-x-3 px-6 py-4 glass-card rounded-xl border-white/5 hover:border-primary/50 transition-all hover:bg-white/5 group bg-black/20">
-                <span className="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">history_edu</span>
+                <span className="material-symbols-outlined text-primary group-hover:scale-110 transition-transform text-[24px]">history_edu</span>
                 <span className="text-sm font-semibold text-slate-200">New Lore Entry</span>
               </button>
             </div>
           </section>
         </div>
       </main>
+      </div>
     </div>
   );
 }

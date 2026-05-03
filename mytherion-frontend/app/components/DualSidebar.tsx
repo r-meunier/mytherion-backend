@@ -24,6 +24,7 @@ interface DualSidebarProps {
   title?: string;
   subTitle?: string;
   onCreateProject?: () => void;
+  onCreateEntity?: () => void;
 }
 
 export default function DualSidebar({
@@ -36,6 +37,7 @@ export default function DualSidebar({
   title: customTitle,
   subTitle: customSubTitle,
   onCreateProject,
+  onCreateEntity,
 }: DualSidebarProps) {
   const { currentProject } = useAppSelector((state) => state.projects);
   const { user } = useAppSelector((state) => state.auth);
@@ -90,28 +92,19 @@ export default function DualSidebar({
   const currentActiveSection = activeIcon || activeSection;
 
   return (
-    <div className="flex h-full shrink-0 relative z-50">
-      {/* Left Sidebar Rail (80px) - Matching Design Layout */}
-      <aside className="w-20 bg-[#0F0F23] border-r border-white/5 flex flex-col items-center py-6 gap-8">
-        {/* Logo - Perfectly Square high-contrast design */}
-        <Link href="/" className="group mb-8">
-          <div className="app-logo-box transition-all duration-500 group-hover:scale-105 group-hover:rotate-3">
-            <span className="material-symbols-outlined app-logo-icon">
-              auto_awesome
-            </span>
-          </div>
-        </Link>
-
+    <div className="flex h-full shrink-0 relative z-40 border-r border-white/5">
+      {/* Left Sidebar Rail (80px) */}
+      <aside className="w-20 bg-[#0F0F23] flex flex-col items-center py-6 gap-8">
         {/* Navigation Rail */}
-        <nav className="flex flex-col gap-8">
+        <nav className="flex flex-col gap-6">
           {iconNavItems.map((item) => (
             <Link
               key={item.id}
               href={item.href}
               className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 group ${
                 currentActiveSection === item.id
-                  ? "bg-[#D8B4FE] text-[#581C87] shadow-[0_0_15px_rgba(216,180,254,0.4)]"
-                  : "text-white/70 hover:bg-white/5 hover:text-white"
+                  ? "bg-primary/10 text-primary border-l-4 border-primary"
+                  : "text-primary hover:bg-white/5 transition-colors hover:text-white"
               }`}
               title={item.label}
             >
@@ -149,25 +142,34 @@ export default function DualSidebar({
         </div>
       </aside>
 
-      {/* Inner Sidebar (256px / w-64) - Matching Design Width */}
-      <aside className="w-64 bg-[#16111B]/80 backdrop-blur-2xl border-r border-white/5 flex flex-col pt-8 font-display">
-        {/* Header */}
-        <div className="px-8 mb-12">
-          <Link href="/">
-            <h2 className="text-2xl font-bold tracking-tighter text-white drop-shadow-[0_0_8px_rgba(168,85,247,0.3)] truncate">
-              {displayTitle}
-            </h2>
-          </Link>
-          <p className="text-[10px] text-white/30 font-bold uppercase tracking-[0.3em] mt-1.5">
-            {displaySubTitle}
-          </p>
-        </div>
+      {/* Inner Sidebar (256px / w-64) */}
+      <aside className="w-64 bg-[#16111B]/80 backdrop-blur-2xl flex flex-col pt-8 font-display">
+        {/* Contextual Branding (Project Specific) */}
+        {isProjectMode && (
+          <div className="px-8 mb-10 min-h-[64px] flex flex-col justify-center">
+            {currentProject ? (
+              <div className="animate-in fade-in duration-500">
+                <h2 className="text-2xl font-bold tracking-tighter text-white drop-shadow-[0_0_8px_rgba(168,85,247,0.3)] truncate leading-tight">
+                  {currentProject.name}
+                </h2>
+                <p className="text-[10px] text-white/30 font-bold uppercase tracking-[0.3em] mt-1">
+                  ACTIVE WORLD
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <div className="h-7 w-32 bg-white/5 rounded animate-pulse"></div>
+                <div className="h-3 w-20 bg-white/5 rounded animate-pulse"></div>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Navigation */}
         <nav className="flex-1 px-4 space-y-10 overflow-y-auto custom-scrollbar">
           {/* Main Nav */}
           <div className="space-y-1">
-            <p className="px-4 text-[10px] font-black text-white/10 uppercase tracking-[0.4em] mb-4">
+            <p className="px-4 text-[10px] font-black text-white/40 uppercase tracking-[0.4em] mb-4">
               Navigation
             </p>
             {currentNavItems.map((item) => (
@@ -180,9 +182,7 @@ export default function DualSidebar({
                     : "text-white/70 hover:text-white hover:bg-white/5"
                 }`}
               >
-                <span className={`material-symbols-outlined text-[20px] transition-all duration-300 group-hover:scale-110 ${
-                  currentActiveSection === item.id ? "text-[#F1E0FF]" : ""
-                }`}>
+                <span className="material-symbols-outlined text-[20px] transition-all duration-300 group-hover:scale-110">
                   {item.icon}
                 </span>
                 <span className="text-sm font-semibold tracking-tight truncate">{item.label}</span>
@@ -192,16 +192,20 @@ export default function DualSidebar({
 
           {/* Library Nav */}
           <div className="space-y-1">
-            <p className="px-4 text-[10px] font-black text-white/10 uppercase tracking-[0.4em] mb-4">
+            <p className="px-4 text-[10px] font-black text-white/40 uppercase tracking-[0.4em] mb-4">
               Library
             </p>
             {currentLibraryItems.map((item) => (
               <Link
                 key={item.id}
                 href={item.href}
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-white/60 hover:text-white hover:bg-white/5 transition-all group"
+                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 group ${
+                  currentActiveSection === item.id
+                    ? "sidebar-item-active"
+                    : "text-white/60 hover:text-white hover:bg-white/5"
+                }`}
               >
-                <span className="material-symbols-outlined text-xl transition-all duration-300">
+                <span className="material-symbols-outlined text-[20px] transition-all duration-300 group-hover:scale-110">
                   {item.icon}
                 </span>
                 <span className="text-sm font-semibold tracking-tight truncate">{item.label}</span>
@@ -209,18 +213,20 @@ export default function DualSidebar({
             ))}
           </div>
 
-          {/* Creation Action */}
-          {!isProjectMode && onCreateProject && (
-            <div className="px-4 pt-4 pb-8">
-              <button 
-                onClick={onCreateProject}
-                className="w-full bg-white/5 hover:bg-white/10 text-white px-4 py-3 rounded-xl flex items-center justify-center gap-2 transition-all border border-white/10 hover:border-primary/50 group active:scale-[0.98]"
+        <div className="px-4 mb-8">
+          {/* Contextual Actions */}
+          <div className="flex flex-col gap-3">
+            {isProjectMode && onCreateEntity && (
+              <button
+                onClick={onCreateEntity}
+                className="btn-glass w-full py-3"
               >
-                <span className="material-symbols-outlined text-[20px] text-primary group-hover:scale-110 transition-transform">add_circle</span>
-                <span className="text-xs font-bold uppercase tracking-widest">Create New Project</span>
+                <span className="material-symbols-outlined text-[20px]">add</span>
+                Create New Entity
               </button>
-            </div>
-          )}
+            )}
+          </div>
+        </div>
         </nav>
 
         {/* Management (Settings/Support with labels) */}
@@ -229,16 +235,16 @@ export default function DualSidebar({
             <Link
               key={item.id}
               href={item.href}
-              className={`flex items-center gap-3 px-4 py-2 rounded-lg transition-colors text-sm ${
-                currentActiveSection === item.id
-                  ? "bg-white/5 text-white"
-                  : "text-white/40 hover:text-white/80"
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 group ${
+                currentActiveSection === item.id 
+                  ? "sidebar-item-active" 
+                  : "text-white/70 hover:text-white"
               }`}
             >
-              <span className="material-symbols-outlined text-xl">
+              <span className="material-symbols-outlined text-[20px] transition-all duration-300 group-hover:scale-110">
                 {item.icon}
               </span>
-              <span className="font-medium truncate">{item.label}</span>
+              <span className="text-sm font-semibold tracking-tight truncate">{item.label}</span>
             </Link>
           ))}
         </div>
