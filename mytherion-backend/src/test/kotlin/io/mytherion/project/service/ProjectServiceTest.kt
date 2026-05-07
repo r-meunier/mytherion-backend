@@ -63,6 +63,11 @@ class ProjectServiceTest {
     // Stub metricsService calls (these methods return Unit)
     every { metricsService.recordProjectCreation(any(), any()) } just Runs
     every { metricsService.recordEntityQuery(any(), any(), any()) } just Runs
+    every { metricsService.recordEntityQuery(any(), any(), any()) } just Runs
+
+    // Default stub for entityQueryService
+    every { entityQueryService.countByProject(any()) } returns 0L
+    every { entityQueryService.countByProjectGrouped(any()) } returns emptyMap()
   }
 
   @AfterEach

@@ -11,15 +11,24 @@ import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 
 @Configuration
+@EnableWebSecurity
 @EnableMethodSecurity
 class SecurityConfig(
     private val jwtAuthFilter: JwtAuthFilter,
     @org.springframework.beans.factory.annotation.Value("\${app.security.allowed-origins}")
-    private val allowedOrigins: List<String>
+    private val allowedOriginsString: String
 ) {
+    private val allowedOrigins: List<String> = allowedOriginsString.split(",").map { it.trim() }
+    private val logger = org.slf4j.LoggerFactory.getLogger(SecurityConfig::class.java)
+
+    init {
+        logger.info("Initializing SecurityConfig with allowed origins: {}", allowedOrigins)
+    }
+
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {

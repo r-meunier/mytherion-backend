@@ -2,6 +2,7 @@ package io.mytherion.entity.controller
 
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
+import io.mytherion.auth.jwt.JwtAuthFilter
 import io.mytherion.auth.jwt.JwtService
 import io.mytherion.auth.util.CookieUtil
 import io.mytherion.entity.dto.CreateEntityRequest
@@ -25,6 +26,7 @@ import tools.jackson.databind.ObjectMapper
 
 @WebMvcTest(EntityController::class)
 @AutoConfigureMockMvc(addFilters = false)
+@org.springframework.test.context.TestPropertySource(properties = ["app.security.allowed-origins=http://localhost:3000"])
 class EntityControllerTest {
 
     @Autowired
@@ -42,6 +44,27 @@ class EntityControllerTest {
     @MockkBean
     private lateinit var cookieUtil: CookieUtil
 
+    @MockkBean
+    private lateinit var jwtAuthFilter: JwtAuthFilter
+
+    @MockkBean
+    private lateinit var projectAccessInterceptor: io.mytherion.project.rest.ProjectAccessInterceptor
+
+    @MockkBean
+    private lateinit var performanceInterceptor: io.mytherion.monitoring.PerformanceInterceptor
+
+    @MockkBean
+    private lateinit var projectRepository: io.mytherion.project.repository.ProjectRepository
+
+    @MockkBean
+    private lateinit var currentUserProvider: io.mytherion.auth.CurrentUserProvider
+
+    @org.junit.jupiter.api.BeforeEach
+    fun setUpInterceptors() {
+        every { projectAccessInterceptor.preHandle(any(), any(), any()) } returns true
+        every { performanceInterceptor.preHandle(any(), any(), any()) } returns true
+    }
+
     @Test
     fun `listEntities should return paginated entities`() {
         // Given
@@ -51,8 +74,10 @@ class EntityControllerTest {
                 projectId = 1L,
                 type = EntityType.CHARACTER,
                 name = "Test Character",
+                category = null,
                 summary = "Test summary",
                 description = "Test description",
+                notes = null,
                 tags = listOf("hero", "mage"),
                 imageUrl = null,
                 metadata = null,
@@ -90,8 +115,10 @@ class EntityControllerTest {
                 projectId = 1L,
                 type = EntityType.CHARACTER,
                 name = "New Character",
+                category = null,
                 summary = "A new character",
                 description = null,
+                notes = null,
                 tags = null,
                 imageUrl = null,
                 metadata = null,
@@ -121,8 +148,10 @@ class EntityControllerTest {
                 projectId = 1L,
                 type = EntityType.CHARACTER,
                 name = "Test Character",
+                category = null,
                 summary = "Test summary",
                 description = "Test description",
+                notes = null,
                 tags = listOf("hero"),
                 imageUrl = null,
                 metadata = null,
@@ -151,8 +180,10 @@ class EntityControllerTest {
                 projectId = 1L,
                 type = EntityType.CHARACTER,
                 name = "Updated Name",
+                category = null,
                 summary = "Updated summary",
                 description = null,
+                notes = null,
                 tags = null,
                 imageUrl = null,
                 metadata = null,

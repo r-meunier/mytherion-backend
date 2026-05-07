@@ -4,6 +4,7 @@ import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import io.mockk.just
 import io.mockk.runs
+import io.mytherion.auth.jwt.JwtAuthFilter
 import io.mytherion.auth.jwt.JwtService
 import io.mytherion.auth.util.CookieUtil
 import io.mytherion.project.ProjectTestFixtures
@@ -27,6 +28,7 @@ import tools.jackson.databind.ObjectMapper
 
 @WebMvcTest(controllers = [ProjectController::class])
 @AutoConfigureMockMvc(addFilters = false)
+@org.springframework.test.context.TestPropertySource(properties = ["app.security.allowed-origins=http://localhost:3000"])
 class ProjectControllerTest {
 
     @Autowired
@@ -43,6 +45,27 @@ class ProjectControllerTest {
 
     @MockkBean
     private lateinit var cookieUtil: CookieUtil
+
+    @MockkBean
+    private lateinit var jwtAuthFilter: JwtAuthFilter
+
+    @MockkBean
+    private lateinit var projectAccessInterceptor: io.mytherion.project.rest.ProjectAccessInterceptor
+
+    @MockkBean
+    private lateinit var performanceInterceptor: io.mytherion.monitoring.PerformanceInterceptor
+
+    @MockkBean
+    private lateinit var projectRepository: io.mytherion.project.repository.ProjectRepository
+
+    @MockkBean
+    private lateinit var currentUserProvider: io.mytherion.auth.CurrentUserProvider
+
+    @org.junit.jupiter.api.BeforeEach
+    fun setUpInterceptors() {
+        every { projectAccessInterceptor.preHandle(any(), any(), any()) } returns true
+        every { performanceInterceptor.preHandle(any(), any(), any()) } returns true
+    }
 
     // ==================== List Projects Tests ====================
 

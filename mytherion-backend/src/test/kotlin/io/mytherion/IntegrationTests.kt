@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.client.RestTestClient
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureRestTestClient
 // TODO
-class IntegrationTests(@Autowired val restClient: RestTestClient) {
+class IntegrationTests {
 
     companion object {
         @JvmStatic
