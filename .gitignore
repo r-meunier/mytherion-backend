@@ -58,10 +58,6 @@ mytherion-backend/secrets/
 mytherion-backend/data/
 mytherion-backend/certs/
 
-# LLM / AI
-.claude/
-.cursor/
-
 # Package Files
 *.jar
 *.war

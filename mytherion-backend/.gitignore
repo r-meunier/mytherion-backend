@@ -69,10 +69,4 @@ certs/
 *.tar.gz
 *.rar
 
-# LLM
-.claude/
-
 .DS_Store
-
-# Docs
-/docs

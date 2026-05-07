@@ -12,8 +12,10 @@ export const getApiUrl = () => {
     const { hostname, protocol } = window.location;
     
     // 3. Check if the user has provided a manual override in .env
-    // If it's a generic localhost or 127.0.0.1, allow the dynamic logic to take over
-    const isDefaultDevUrl = envUrl.includes('localhost') || envUrl.includes('127.0.0.1');
+    // If it's a generic localhost, 127.0.0.1, or a common local network IP, 
+    // allow the dynamic logic to take over so cookies work correctly (SameSite issues)
+    const isLocalIP = envUrl.match(/^http:\/\/(192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[0-1])\.)/);
+    const isDefaultDevUrl = envUrl.includes('localhost') || envUrl.includes('127.0.0.1') || isLocalIP;
     
     if (isDefaultDevUrl) {
       const isLocal = hostname === 'localhost' || hostname.match(/^(\d{1,3}\.){3}\d{1,3}$/);

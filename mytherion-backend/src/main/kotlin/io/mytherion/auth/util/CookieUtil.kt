@@ -37,7 +37,7 @@ class CookieUtil(
             append("Max-Age=${cookie.maxAge}; ")
             append("HttpOnly; ")
             if (cookie.secure) append("Secure; ")
-            append("SameSite=Strict")
+            append("SameSite=Lax")
         }
         response.addHeader("Set-Cookie", cookieHeader)
     }
@@ -52,7 +52,7 @@ class CookieUtil(
         // Clear cookie via header
         response.addHeader(
             "Set-Cookie",
-            "${JWT_COOKIE_NAME}=; Path=/; Max-Age=0; HttpOnly; SameSite=Strict"
+            "${JWT_COOKIE_NAME}=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax"
         )
     }
 }
